@@ -7,6 +7,8 @@ import dw.randomizer.data.NPCNamesArrays;
 import dw.randomizer.model.NPC;
 import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
+import dw.randomizer.repository.NPCRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,7 +17,32 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
-public class NPCService implements IGenericService<NPC> {
+public class NPCService implements IGenericService<NPC>, INPCCRUDService {
+
+    @Autowired
+    NPCRepository npcRepository;
+
+    @Override
+    public List<NPC> listNPCs() {
+        List<NPC> npcList = npcRepository.findAll();
+        return npcList;
+    }
+
+    @Override
+    public NPC searchById(Integer id) {
+        NPC npc = npcRepository.findById(id).orElse(null);
+        return npc;
+    }
+
+    @Override
+    public void saveNPC(NPC npc) {
+        npcRepository.save(npc);
+    }
+
+    @Override
+    public void deleteNPC(NPC npc) {
+        npcRepository.delete(npc);
+    }
 
     public static void rollFeatures(NPC npc){
         //set race rarity, races array and race

@@ -7,6 +7,8 @@ import dw.randomizer.model.Steading;
 import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.SubMenu;
 import dw.randomizer.presentation.ViewAll;
+import dw.randomizer.repository.DungeonRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,7 +17,34 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
-public class DungeonService {
+public class DungeonService implements IDungeonCRUDService {
+
+    @Autowired
+    DungeonRepository dungeonRepository;
+
+    @Override
+    public List<Dungeon> listDungeons() {
+        List<Dungeon> dungeonList = dungeonRepository.findAll();
+        return dungeonList;
+    }
+
+    @Override
+    public Dungeon searchById(Integer id) {
+        Dungeon dungeon = dungeonRepository.findById(id).orElse(null);
+        return dungeon;
+    }
+
+    @Override
+    public void saveDungeon(Dungeon dungeon) {
+        dungeonRepository.save(dungeon);
+    }
+
+    @Override
+    public void deleteDungeon(Dungeon dungeon) {
+        dungeonRepository.delete(dungeon);
+    }
+
+
     public static void rollDungeon(Dungeon dungeon){
 
         //set name template and name
@@ -90,7 +119,7 @@ public class DungeonService {
         dungeon.setSituation(PickFrom(DungeonArrays.DUNGEON_SITUATION));
         dungeon.setBuilder(PickFrom(DungeonArrays.DUNGEON_BUILDER));
         dungeon.setFunction(PickFrom(DungeonArrays.DUNGEON_FUNCTION));
-        if (Objects.equals(dungeon.getFunction(),"roll twice")||Objects.equals(dungeon.getFunction(),"ROLL TWICE")) Rolls.rollTwice(DungeonArrays.DUNGEON_FUNCTION);
+        if (Objects.equals(dungeon.getFunction(),"roll twice")||Objects.equals(dungeon.getFunction(),"ROLL TWICE")) dungeon.setFunction(Rolls.rollTwice(DungeonArrays.DUNGEON_FUNCTION));
 
         dungeon.setCauseOfRuin(PickFrom(DungeonArrays.DUNGEON_CAUSE_OF_RUIN));
         dungeon.setAccessibility(PickFrom(DungeonArrays.DUNGEON_ACCESSIBILITY));
@@ -100,8 +129,6 @@ public class DungeonService {
         dungeon.setOneLiner(dungeon.getName());
 
     }
-
-
 
     public static void showOptions(Scanner dataInput, Dungeon dungeon, List<Dungeon> dungeonList,List<Area> areaList) {
         int option = 0;

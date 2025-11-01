@@ -3,6 +3,8 @@ package dw.randomizer.service;
 import dw.randomizer.data.DungeonArrays;
 import dw.randomizer.model.Area;
 import dw.randomizer.presentation.ViewAll;
+import dw.randomizer.repository.AreaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Objects;
@@ -11,7 +13,32 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.*;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
-public class AreaService implements IGenericService<Area> {
+public class AreaService implements IGenericService<Area>, IAreaCRUDService {
+
+    @Autowired
+    AreaRepository areaRepository;
+
+    @Override
+    public List<Area> listAreas() {
+        List<Area> areaList = areaRepository.findAll();
+        return areaList;
+    }
+
+    @Override
+    public Area searchById(Integer id) {
+        Area area = areaRepository.findById(id).orElse(null);
+        return area;
+    }
+
+    @Override
+    public void saveArea(Area area) {
+        areaRepository.save(area);
+    }
+
+    @Override
+    public void deleteArea(Area area) {
+        areaRepository.delete(area);
+    }
 
     public static void rollArea(Area area) {
         area.setAreaType(PickFrom(DungeonArrays.AREA_TYPE));
@@ -67,12 +94,11 @@ public class AreaService implements IGenericService<Area> {
         area.setRarity(DungeonArrays.AREA_RARITY[rollRarity]);
 
         area.setAreaDressing(PickFrom(DungeonArrays.AREA_DRESSING));
-        if (Objects.equals(area.getAreaDressing(),"roll twice") || Objects.equals(area.getAreaDressing(),"ROLL TWICE")) rollTwice(DungeonArrays.AREA_DRESSING);
+        if (Objects.equals(area.getAreaDressing(),"roll twice") || Objects.equals(area.getAreaDressing(),"ROLL TWICE")) area.setAreaDressing(rollTwice(DungeonArrays.AREA_DRESSING));
 
         area.addDangers();
         area.addDiscoveries();
     }
-
 
     @Override
     public void showOptions(Scanner dataInput, Area area, List<Area> areaList) {

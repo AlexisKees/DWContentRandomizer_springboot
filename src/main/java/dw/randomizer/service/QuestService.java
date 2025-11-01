@@ -3,6 +3,8 @@ package dw.randomizer.service;
 import dw.randomizer.data.QuestArrays;
 import dw.randomizer.model.*;
 import dw.randomizer.presentation.ViewAll;
+import dw.randomizer.repository.QuestRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Scanner;
@@ -10,7 +12,32 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
-public class QuestService {
+public class QuestService implements IQuestCRUDService {
+
+    @Autowired
+    QuestRepository questRepository;
+
+    @Override
+    public List<Quest> listQuest() {
+        List<Quest> questList = questRepository.findAll();
+        return questList;
+    }
+
+    @Override
+    public Quest searchById(Integer id) {
+        Quest quest = questRepository.findById(id).orElse(null);
+        return quest;
+    }
+
+    @Override
+    public void saveQuest(Quest quest) {
+        questRepository.save(quest);
+    }
+
+    @Override
+    public void deleteQuest(Quest quest) {
+        questRepository.delete(quest);
+    }
 
     public static void rollQuest(Quest quest){
         quest.setTask(PickFrom(QuestArrays.TASK));
@@ -34,8 +61,6 @@ public class QuestService {
                 To be carried out at: %s, in some %s
                 """, quest.getTask(),quest.getRelevance(),quest.getReward(),quest.getQuestGiver().getOneLiner(),quest.getDungeon().getName(), quest.getBiome().getOneLiner()));
     }
-
-
 
     public static void showOptions(Scanner dataInput, Quest quest, List<Quest> questList, List<NPC> npcList, List<Dungeon> dungeonList, List<Biome> biomeList) {
         var option = 0;
@@ -119,6 +144,4 @@ public class QuestService {
         }
         while (option != 6);
     }
-
-
 }

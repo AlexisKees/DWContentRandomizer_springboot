@@ -4,6 +4,8 @@ import dw.randomizer.data.DangerArrays;
 import dw.randomizer.data.DetailsArrays;
 import dw.randomizer.model.*;
 import dw.randomizer.presentation.ViewAll;
+import dw.randomizer.repository.DangerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Scanner;
@@ -11,8 +13,32 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
-public class DangerService implements IGenericService<Danger> {
+public class DangerService implements IGenericService<Danger>, IDangerCRUDService {
 
+    @Autowired
+    DangerRepository dangerRepository;
+
+    @Override
+    public List<Danger> listDangers() {
+        List<Danger> dangerList = dangerRepository.findAll();
+        return dangerList;
+    }
+
+    @Override
+    public Danger searchById(Integer id) {
+        Danger danger = dangerRepository.findById(id).orElse(null);
+        return danger;
+    }
+
+    @Override
+    public void saveDanger(Danger danger) {
+        dangerRepository.save(danger);
+    }
+
+    @Override
+    public void deleteDanger(Danger danger) {
+        dangerRepository.delete(danger);
+    }
 
     public static void rollDanger(Danger danger){
         danger.setCategory(PickFrom(DangerArrays.DANGER_CATEGORIES));
@@ -83,8 +109,6 @@ public class DangerService implements IGenericService<Danger> {
 
 
     }
-
-
 
     @Override
     public void showOptions(Scanner dataInput, Danger danger, List<Danger> dangerList) {

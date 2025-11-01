@@ -14,10 +14,9 @@ import static dw.randomizer.model.util.Rolls.*;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 @Service
-public class BiomeService implements IGenericService<Biome>, IBiomeService {
+public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
     @Autowired
     private BiomeRepository biomeRepository;
-
 
     public static void rollBiome(Biome biome){
 //        private String biome;
@@ -145,6 +144,5 @@ public class BiomeService implements IGenericService<Biome>, IBiomeService {
         biomeRepository.delete(biome);
 
     }
-
 
 }

@@ -4,6 +4,8 @@ import dw.randomizer.data.DetailsArrays;
 import dw.randomizer.data.SteadingArrays;
 import dw.randomizer.model.Steading;
 import dw.randomizer.presentation.ViewAll;
+import dw.randomizer.repository.SteadingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Scanner;
@@ -12,7 +14,33 @@ import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 
-public class SteadingService implements IGenericService<Steading> {
+public class SteadingService implements IGenericService<Steading>, ISteadingCRUDService {
+
+    @Autowired
+    SteadingRepository steadingRepository;
+
+    @Override
+    public List<Steading> listSteading() {
+        List<Steading> steadingList = steadingRepository.findAll();
+        return steadingList;
+    }
+
+    @Override
+    public Steading searchById(Integer id) {
+        Steading steading = steadingRepository.findById(id).orElse(null);
+        return steading;
+    }
+
+    @Override
+    public void saveSteading(Steading steading) {
+        steadingRepository.save(steading);
+    }
+
+    @Override
+    public void deleteSteading(Steading steading) {
+        steadingRepository.delete(steading);
+    }
+
 
     public static void rollSteading(Steading steading){
         steading.setSize(PickFrom(SteadingArrays.SETTLEMENT_SIZE));

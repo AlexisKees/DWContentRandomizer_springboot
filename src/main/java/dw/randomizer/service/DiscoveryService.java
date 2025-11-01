@@ -5,6 +5,8 @@ import dw.randomizer.data.DiscoveryArrays;
 import dw.randomizer.model.*;
 import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
+import dw.randomizer.repository.DiscoveryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Scanner;
@@ -12,7 +14,32 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
-public class DiscoveryService implements IGenericService<Discovery> {
+public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryCRUDService {
+
+    @Autowired
+    DiscoveryRepository discoveryRepository;
+
+    @Override
+    public List<Discovery> listDiscoveries() {
+        List<Discovery> discoveryList = discoveryRepository.findAll();
+        return discoveryList;
+    }
+
+    @Override
+    public Discovery searchById(Integer id) {
+        Discovery discovery = discoveryRepository.findById(id).orElse(null);
+        return discovery;
+    }
+
+    @Override
+    public void saveDiscovery(Discovery discovery) {
+        discoveryRepository.save(discovery);
+    }
+
+    @Override
+    public void deleteDiscovery(Discovery discovery) {
+        discoveryRepository.delete(discovery);
+    }
 
     public static void rollDiscovery(Discovery discovery){
         discovery.setCategory(PickFrom(DiscoveryArrays.DISCOVERY_CATEGORIES));
@@ -180,7 +207,6 @@ public class DiscoveryService implements IGenericService<Discovery> {
 
     }
 
-
     private static void rollRuins(Discovery discovery){
         String ruin = PickFrom(DiscoveryArrays.RUIN_PROMPTS);
 
@@ -219,8 +245,6 @@ public class DiscoveryService implements IGenericService<Discovery> {
             default -> {}
         }
     }
-
-
 
     @Override
     public void showOptions(Scanner dataInput, Discovery discovery, List<Discovery> discoveryList) {
@@ -274,6 +298,7 @@ public class DiscoveryService implements IGenericService<Discovery> {
             System.out.println("\nPlease choose a valid option.\n");
         }
     }
+
 
 
 }

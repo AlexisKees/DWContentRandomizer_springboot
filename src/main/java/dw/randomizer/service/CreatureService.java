@@ -4,6 +4,8 @@ import dw.randomizer.data.CreatureArrays;
 import dw.randomizer.data.DetailsArrays;
 import dw.randomizer.model.Creature;
 import dw.randomizer.presentation.ViewAll;
+import dw.randomizer.repository.CreatureRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +15,32 @@ import static dw.randomizer.model.util.Rolls.*;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 
-public class CreatureService implements IGenericService<Creature> {
+public class CreatureService implements IGenericService<Creature>, ICreatureCRUDService {
+
+    @Autowired
+    CreatureRepository creatureRepository;
+
+    @Override
+    public List<Creature> listCreatures() {
+        List<Creature> creatureList = creatureRepository.findAll();
+        return creatureList;
+    }
+
+    @Override
+    public Creature searchById(Integer id) {
+        Creature creature = creatureRepository.findById(id).orElse(null);
+        return creature;
+    }
+
+    @Override
+    public void saveCreature(Creature creature) {
+        creatureRepository.save(creature);
+    }
+
+    @Override
+    public void deleteCreature(Creature creature) {
+        creatureRepository.delete(creature);
+    }
 
     public static String rollOddity(){
         String odd = PickFrom(DetailsArrays.ODDITY);
@@ -218,7 +245,6 @@ public class CreatureService implements IGenericService<Creature> {
 
     }
 
-
     private static void rollGroupSize(Creature creature){
         creature.setGroupSize(PickFrom(DetailsArrays.NO_APPEARING));
 
@@ -258,7 +284,6 @@ public class CreatureService implements IGenericService<Creature> {
 
     }
 
-
     private static void rollSize(Creature creature){
         creature.setSize(PickFrom(DetailsArrays.SIZE));
         switch (creature.getSize()){
@@ -282,6 +307,7 @@ public class CreatureService implements IGenericService<Creature> {
         }
 
     }
+
     private static void rollArmor(Creature creature){
         creature.setArmorType(PickFrom(DetailsArrays.ARMOR));
         switch (creature.getArmorType()){
@@ -292,6 +318,7 @@ public class CreatureService implements IGenericService<Creature> {
             case "Magical armor" -> creature.setArmor(4);
         }
     }
+
     private static void rollDamageType(Creature creature){
         creature.setDamageType(PickFrom(DetailsArrays.DAMAGE_TYPE));
         switch (creature.getDamageType()){
@@ -304,6 +331,7 @@ public class CreatureService implements IGenericService<Creature> {
 
 
     }
+
     private static void rollTags(Creature creature){
         String tag = PickFrom(DetailsArrays.TAG);
         if (tag.equals("roll twice")||tag.equals("ROLL TWICE")) tag = rollTwice(DetailsArrays.TAG);
@@ -318,7 +346,6 @@ public class CreatureService implements IGenericService<Creature> {
     private static void rollDisposition(Creature creature) {
         creature.setDisposition(PickFrom(DetailsArrays.DISPOSITION));
     }
-
 
     @Override
     public void showOptions(Scanner dataInput, Creature creature, List<Creature> creatureList) {

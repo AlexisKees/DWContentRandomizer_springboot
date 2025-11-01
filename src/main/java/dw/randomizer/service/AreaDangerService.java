@@ -4,13 +4,39 @@ import dw.randomizer.data.DetailsArrays;
 import dw.randomizer.data.DungeonArrays;
 import dw.randomizer.model.AreaDanger;
 import dw.randomizer.model.Creature;
+import dw.randomizer.repository.AreaDangerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Scanner;
 
 import static dw.randomizer.model.util.Rolls.PickFrom;
 
-public class AreaDangerService implements IGenericService<AreaDanger> {
+public class AreaDangerService implements IAreaDangerCRUDService {
+    @Autowired
+    AreaDangerRepository areaDangerRepository;
+    @Override
+    public List<AreaDanger> listAreaDangers() {
+        List<AreaDanger> areaDangerList = areaDangerRepository.findAll();
+        return areaDangerList;
+    }
+
+    @Override
+    public AreaDanger searchById(Integer id) {
+        AreaDanger areaDanger = areaDangerRepository.findById(id).orElse(null);
+        return areaDanger;
+    }
+
+    @Override
+    public void saveAreaDanger(AreaDanger areaDanger) {
+        areaDangerRepository.save(areaDanger);
+
+    }
+
+    @Override
+    public void deleteAreaDanger(AreaDanger areaDanger) {
+        areaDangerRepository.delete(areaDanger);
+
+    }
 
     public static void rollAreaDanger(AreaDanger danger){
         danger.setCategory(PickFrom(DungeonArrays.DUNGEON_DANGER_CATEGORIES));
@@ -70,11 +96,6 @@ public class AreaDangerService implements IGenericService<AreaDanger> {
         }
 
 
-
-    }
-
-    @Override
-    public void showOptions(Scanner dataInput, AreaDanger object, List<AreaDanger> list) {
 
     }
 }

@@ -24,7 +24,7 @@ public class DungeonAreaService {
                         1) Create new random area
                         2) View current area
                         3) Reroll this area
-                        4) View list of generated area
+                        4) View list of generated areas
                         5) Add area to dungeon
                         6) Back to Dungeon menu
                         

@@ -7,6 +7,8 @@ import dw.randomizer.data.NPCNamesArrays;
 import dw.randomizer.model.Follower;
 import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
+import dw.randomizer.repository.FollowerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Scanner;
@@ -14,7 +16,33 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
-public class FollowerService implements IGenericService<Follower> {
+public class FollowerService implements IGenericService<Follower>, IFollowerCRUDService {
+
+    @Autowired
+    FollowerRepository followerRepository;
+
+    @Override
+    public List<Follower> listFollowers() {
+        List<Follower> followerList = followerRepository.findAll();
+        return followerList;
+    }
+
+    @Override
+    public Follower searchById(Integer id) {
+        Follower follower = followerRepository.findById(id).orElse(null);
+        return follower;
+    }
+
+    @Override
+    public void saveFollower(Follower follower) {
+        followerRepository.save(follower);
+    }
+
+    @Override
+    public void deleteFollower(Follower follower) {
+        followerRepository.delete(follower);
+    }
+
     public static void rollFollower(Follower follower){
         int rarity = Rolls.Roll1d12();
         switch (CreatureArrays.SUBCATEGORIES_HUMANOID[rarity]) {
@@ -120,8 +148,6 @@ public class FollowerService implements IGenericService<Follower> {
 
     }
 
-
-
     public static void addTag(Follower f){
         String tag;
         boolean tagAlreadyExists;
@@ -133,6 +159,7 @@ public class FollowerService implements IGenericService<Follower> {
         if (f.getTags().isEmpty()) f.setTags(tag);
         else f.setTags(f.getTags()+", "+tag.toLowerCase());
     }
+
     public static void addTag(Follower f, String tag){
         boolean tagAlreadyExists = ((f.getTags().contains(tag))||(f.getTags().contains(tag.toLowerCase())));
 
@@ -172,7 +199,6 @@ public class FollowerService implements IGenericService<Follower> {
         }
 
     }
-
 
     @Override
     public void showOptions(Scanner dataInput, Follower follower, List<Follower> followerList) {
