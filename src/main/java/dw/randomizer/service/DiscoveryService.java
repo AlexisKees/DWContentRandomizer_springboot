@@ -7,6 +7,7 @@ import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.DiscoveryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Scanner;
@@ -14,30 +15,31 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
+@Service
 public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryCRUDService {
 
     @Autowired
     DiscoveryRepository discoveryRepository;
 
     @Override
-    public List<Discovery> listDiscoveries() {
+    public List<Discovery> listCRUD() {
         List<Discovery> discoveryList = discoveryRepository.findAll();
         return discoveryList;
     }
 
     @Override
-    public Discovery searchById(Integer id) {
+    public Discovery searchByIdCRUD(Integer id) {
         Discovery discovery = discoveryRepository.findById(id).orElse(null);
         return discovery;
     }
 
     @Override
-    public void saveDiscovery(Discovery discovery) {
+    public void saveCRUD(Discovery discovery) {
         discoveryRepository.save(discovery);
     }
 
     @Override
-    public void deleteDiscovery(Discovery discovery) {
+    public void deleteCRUD(Discovery discovery) {
         discoveryRepository.delete(discovery);
     }
 

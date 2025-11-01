@@ -4,13 +4,13 @@ import dw.randomizer.model.Follower;
 
 import java.util.List;
 
-public interface IFollowerCRUDService {
-    List<Follower> listFollowers();
+public interface IFollowerCRUDService extends IGenericCRUDService<Follower>{
+    List<Follower> listCRUD();
     //metodo para read
-    Follower searchById(Integer id);
+    Follower searchByIdCRUD(Integer id);
     //el siguiente caso save se usa tanto como para INSERT como para UPDATE
     //si id es null, se hace insert, caso contrario se hace update
-    void saveFollower(Follower follower);
+    void saveCRUD(Follower area);
     //metodo para delete
-    void deleteFollower(Follower follower);
+    void deleteCRUD(Follower area);
 }

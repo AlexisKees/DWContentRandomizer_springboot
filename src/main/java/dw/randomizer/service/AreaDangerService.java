@@ -6,34 +6,37 @@ import dw.randomizer.model.AreaDanger;
 import dw.randomizer.model.Creature;
 import dw.randomizer.repository.AreaDangerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Scanner;
 
 import static dw.randomizer.model.util.Rolls.PickFrom;
 
-public class AreaDangerService implements IAreaDangerCRUDService {
+@Service
+public class AreaDangerService implements IGenericService<AreaDanger>, IAreaDangerCRUDService {
     @Autowired
     AreaDangerRepository areaDangerRepository;
     @Override
-    public List<AreaDanger> listAreaDangers() {
+    public List<AreaDanger> listCRUD() {
         List<AreaDanger> areaDangerList = areaDangerRepository.findAll();
         return areaDangerList;
     }
 
     @Override
-    public AreaDanger searchById(Integer id) {
+    public AreaDanger searchByIdCRUD(Integer id) {
         AreaDanger areaDanger = areaDangerRepository.findById(id).orElse(null);
         return areaDanger;
     }
 
     @Override
-    public void saveAreaDanger(AreaDanger areaDanger) {
+    public void saveCRUD(AreaDanger areaDanger) {
         areaDangerRepository.save(areaDanger);
 
     }
 
     @Override
-    public void deleteAreaDanger(AreaDanger areaDanger) {
+    public void deleteCRUD(AreaDanger areaDanger) {
         areaDangerRepository.delete(areaDanger);
 
     }
@@ -96,6 +99,11 @@ public class AreaDangerService implements IAreaDangerCRUDService {
         }
 
 
+
+    }
+
+    @Override
+    public void showOptions(Scanner dataInput, AreaDanger object, List<AreaDanger> list) {
 
     }
 }

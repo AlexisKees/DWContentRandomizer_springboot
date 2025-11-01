@@ -1,16 +1,17 @@
 package dw.randomizer.service;
 
-import dw.randomizer.model.Danger;
+import dw.randomizer.model.Area;
+import dw.randomizer.model.IPWClass;
 
 import java.util.List;
 
-public interface IDangerCRUDService extends IGenericCRUDService<Danger>{
-    List<Danger> listCRUD();
+public interface IGenericCRUDService<T extends IPWClass> {
+    List<T> listCRUD();
     //metodo para read
-    Danger searchByIdCRUD(Integer id);
+    T searchByIdCRUD(Integer id);
     //el siguiente caso save se usa tanto como para INSERT como para UPDATE
     //si id es null, se hace insert, caso contrario se hace update
-    void saveCRUD(Danger area);
+    void saveCRUD(T area);
     //metodo para delete
-    void deleteCRUD(Danger area);
+    void deleteCRUD(T area);
 }

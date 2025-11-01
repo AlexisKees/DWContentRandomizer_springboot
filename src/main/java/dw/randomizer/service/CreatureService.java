@@ -6,6 +6,7 @@ import dw.randomizer.model.Creature;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.CreatureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
@@ -14,31 +15,31 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.*;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
-
+@Service
 public class CreatureService implements IGenericService<Creature>, ICreatureCRUDService {
 
     @Autowired
     CreatureRepository creatureRepository;
 
     @Override
-    public List<Creature> listCreatures() {
+    public List<Creature> listCRUD() {
         List<Creature> creatureList = creatureRepository.findAll();
         return creatureList;
     }
 
     @Override
-    public Creature searchById(Integer id) {
+    public Creature searchByIdCRUD(Integer id) {
         Creature creature = creatureRepository.findById(id).orElse(null);
         return creature;
     }
 
     @Override
-    public void saveCreature(Creature creature) {
+    public void saveCRUD(Creature creature) {
         creatureRepository.save(creature);
     }
 
     @Override
-    public void deleteCreature(Creature creature) {
+    public void deleteCRUD(Creature creature) {
         creatureRepository.delete(creature);
     }
 

@@ -6,6 +6,7 @@ import dw.randomizer.model.*;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.DangerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Scanner;
@@ -13,30 +14,31 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
+@Service
 public class DangerService implements IGenericService<Danger>, IDangerCRUDService {
 
     @Autowired
     DangerRepository dangerRepository;
 
     @Override
-    public List<Danger> listDangers() {
+    public List<Danger> listCRUD() {
         List<Danger> dangerList = dangerRepository.findAll();
         return dangerList;
     }
 
     @Override
-    public Danger searchById(Integer id) {
+    public Danger searchByIdCRUD(Integer id) {
         Danger danger = dangerRepository.findById(id).orElse(null);
         return danger;
     }
 
     @Override
-    public void saveDanger(Danger danger) {
+    public void saveCRUD(Danger danger) {
         dangerRepository.save(danger);
     }
 
     @Override
-    public void deleteDanger(Danger danger) {
+    public void deleteCRUD(Danger danger) {
         dangerRepository.delete(danger);
     }
 

@@ -4,14 +4,13 @@ import dw.randomizer.model.Biome;
 
 import java.util.List;
 
-public interface IBiomeCRUDService {
-    List<Biome> listBiome();
+public interface IBiomeCRUDService extends IGenericCRUDService<Biome>{
+    List<Biome> listCRUD();
     //metodo para read
-    Biome searchByIdBiome(Integer id);
+    Biome searchByIdCRUD(Integer id);
     //el siguiente caso save se usa tanto como para INSERT como para UPDATE
     //si id es null, se hace insert, caso contrario se hace update
-    void saveBiome(Biome biome);
+    void saveCRUD(Biome area);
     //metodo para delete
-    void deleteBiome(Biome biome);
-
+    void deleteCRUD(Biome area);
 }

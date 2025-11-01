@@ -9,6 +9,7 @@ import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.FollowerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Scanner;
@@ -16,30 +17,31 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
+@Service
 public class FollowerService implements IGenericService<Follower>, IFollowerCRUDService {
 
     @Autowired
     FollowerRepository followerRepository;
 
     @Override
-    public List<Follower> listFollowers() {
+    public List<Follower> listCRUD() {
         List<Follower> followerList = followerRepository.findAll();
         return followerList;
     }
 
     @Override
-    public Follower searchById(Integer id) {
+    public Follower searchByIdCRUD(Integer id) {
         Follower follower = followerRepository.findById(id).orElse(null);
         return follower;
     }
 
     @Override
-    public void saveFollower(Follower follower) {
+    public void saveCRUD(Follower follower) {
         followerRepository.save(follower);
     }
 
     @Override
-    public void deleteFollower(Follower follower) {
+    public void deleteCRUD(Follower follower) {
         followerRepository.delete(follower);
     }
 

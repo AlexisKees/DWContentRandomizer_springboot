@@ -9,6 +9,7 @@ import dw.randomizer.presentation.SubMenu;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.DungeonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,30 +18,31 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
+@Service
 public class DungeonService implements IDungeonCRUDService {
 
     @Autowired
     DungeonRepository dungeonRepository;
 
     @Override
-    public List<Dungeon> listDungeons() {
+    public List<Dungeon> listCRUD() {
         List<Dungeon> dungeonList = dungeonRepository.findAll();
         return dungeonList;
     }
 
     @Override
-    public Dungeon searchById(Integer id) {
+    public Dungeon searchByIdCRUD(Integer id) {
         Dungeon dungeon = dungeonRepository.findById(id).orElse(null);
         return dungeon;
     }
 
     @Override
-    public void saveDungeon(Dungeon dungeon) {
+    public void saveCRUD(Dungeon dungeon) {
         dungeonRepository.save(dungeon);
     }
 
     @Override
-    public void deleteDungeon(Dungeon dungeon) {
+    public void deleteCRUD(Dungeon dungeon) {
         dungeonRepository.delete(dungeon);
     }
 

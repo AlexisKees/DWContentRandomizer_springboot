@@ -4,37 +4,40 @@ import dw.randomizer.data.DungeonArrays;
 import dw.randomizer.model.AreaDiscovery;
 import dw.randomizer.repository.AreaDiscoveryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import static dw.randomizer.model.util.Rolls.*;
 
 import java.util.List;
+import java.util.Scanner;
 
 import static dw.randomizer.model.util.Rolls.PickFrom;
 
-public class AreaDiscoveryService implements IAreaDiscoveryCRUDService {
+@Service
+public class AreaDiscoveryService implements IGenericService<AreaDiscovery>, IAreaDiscoveryCRUDService {
 
     @Autowired
     AreaDiscoveryRepository areaDiscoveryRepository;
 
     @Override
-    public List<AreaDiscovery> listAreaDiscoveries() {
+    public List<AreaDiscovery> listCRUD() {
         List<AreaDiscovery> areaDiscoveries = areaDiscoveryRepository.findAll();
         return areaDiscoveries;
     }
 
     @Override
-    public AreaDiscovery searchById(Integer id) {
+    public AreaDiscovery searchByIdCRUD(Integer id) {
         AreaDiscovery areaDiscovery = areaDiscoveryRepository.findById(id).orElse(null);
         return areaDiscovery;
     }
 
     @Override
-    public void saveAreaDiscovery(AreaDiscovery areaDiscovery) {
+    public void saveCRUD(AreaDiscovery areaDiscovery) {
         areaDiscoveryRepository.save(areaDiscovery);
     }
 
     @Override
-    public void deleteAreaDiscovery(AreaDiscovery areaDiscovery) {
+    public void deleteCRUD(AreaDiscovery areaDiscovery) {
         areaDiscoveryRepository.delete(areaDiscovery);
     }
 
@@ -65,6 +68,11 @@ public class AreaDiscoveryService implements IAreaDiscoveryCRUDService {
         }
 
         discovery.setOneLiner(discovery.getFinalResult());
+
+    }
+
+    @Override
+    public void showOptions(Scanner dataInput, AreaDiscovery object, List<AreaDiscovery> list) {
 
     }
 }

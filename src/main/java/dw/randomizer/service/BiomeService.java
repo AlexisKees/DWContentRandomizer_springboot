@@ -122,25 +122,25 @@ public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
     }
 
     @Override
-    public List<Biome> listBiome() {
+    public List<Biome> listCRUD() {
         List<Biome> biomes = biomeRepository.findAll();
         return biomes;
     }
 
     @Override
-    public Biome searchByIdBiome(Integer id) {
+    public Biome searchByIdCRUD(Integer id) {
         Biome biome = biomeRepository.findById(id).orElse(null);
         return biome;
     }
 
     @Override
-    public void saveBiome(Biome biome) {
+    public void saveCRUD(Biome biome) {
         biomeRepository.save(biome);
 
     }
 
     @Override
-    public void deleteBiome(Biome biome) {
+    public void deleteCRUD(Biome biome) {
         biomeRepository.delete(biome);
 
     }

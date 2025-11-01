@@ -5,6 +5,7 @@ import dw.randomizer.model.Area;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.AreaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,30 +14,31 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.*;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
+@Service
 public class AreaService implements IGenericService<Area>, IAreaCRUDService {
 
     @Autowired
     AreaRepository areaRepository;
 
     @Override
-    public List<Area> listAreas() {
+    public List<Area> listCRUD() {
         List<Area> areaList = areaRepository.findAll();
         return areaList;
     }
 
     @Override
-    public Area searchById(Integer id) {
+    public Area searchByIdCRUD(Integer id) {
         Area area = areaRepository.findById(id).orElse(null);
         return area;
     }
 
     @Override
-    public void saveArea(Area area) {
+    public void saveCRUD(Area area) {
         areaRepository.save(area);
     }
 
     @Override
-    public void deleteArea(Area area) {
+    public void deleteCRUD(Area area) {
         areaRepository.delete(area);
     }
 

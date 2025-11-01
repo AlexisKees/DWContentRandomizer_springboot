@@ -4,13 +4,13 @@ import dw.randomizer.model.Area;
 
 import java.util.List;
 
-public interface IAreaCRUDService {
-    List<Area> listAreas();
+public interface IAreaCRUDService extends IGenericCRUDService<Area>{
+    List<Area> listCRUD();
     //metodo para read
-    Area searchById(Integer id);
+    Area searchByIdCRUD(Integer id);
     //el siguiente caso save se usa tanto como para INSERT como para UPDATE
     //si id es null, se hace insert, caso contrario se hace update
-    void saveArea(Area area);
+    void saveCRUD(Area area);
     //metodo para delete
-    void deleteArea(Area area);
+    void deleteCRUD(Area area);
 }

@@ -4,13 +4,13 @@ import dw.randomizer.model.NPC;
 
 import java.util.List;
 
-public interface INPCCRUDService {
-    List<NPC> listNPCs();
+public interface INPCCRUDService extends IGenericCRUDService<NPC>{
+    List<NPC> listCRUD();
     //metodo para read
-    NPC searchById(Integer id);
+    NPC searchByIdCRUD(Integer id);
     //el siguiente caso save se usa tanto como para INSERT como para UPDATE
     //si id es null, se hace insert, caso contrario se hace update
-    void saveNPC(NPC npc);
+    void saveCRUD(NPC area);
     //metodo para delete
-    void deleteNPC(NPC npc);
+    void deleteCRUD(NPC area);
 }

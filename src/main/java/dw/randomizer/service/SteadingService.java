@@ -6,6 +6,7 @@ import dw.randomizer.model.Steading;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.SteadingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Scanner;
@@ -13,31 +14,31 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
-
+@Service
 public class SteadingService implements IGenericService<Steading>, ISteadingCRUDService {
 
     @Autowired
     SteadingRepository steadingRepository;
 
     @Override
-    public List<Steading> listSteading() {
+    public List<Steading> listCRUD() {
         List<Steading> steadingList = steadingRepository.findAll();
         return steadingList;
     }
 
     @Override
-    public Steading searchById(Integer id) {
+    public Steading searchByIdCRUD(Integer id) {
         Steading steading = steadingRepository.findById(id).orElse(null);
         return steading;
     }
 
     @Override
-    public void saveSteading(Steading steading) {
+    public void saveCRUD(Steading steading) {
         steadingRepository.save(steading);
     }
 
     @Override
-    public void deleteSteading(Steading steading) {
+    public void deleteCRUD(Steading steading) {
         steadingRepository.delete(steading);
     }
 

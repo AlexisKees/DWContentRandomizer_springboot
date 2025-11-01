@@ -9,6 +9,7 @@ import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.NPCRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,30 +18,31 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
+@Service
 public class NPCService implements IGenericService<NPC>, INPCCRUDService {
 
     @Autowired
     NPCRepository npcRepository;
 
     @Override
-    public List<NPC> listNPCs() {
+    public List<NPC> listCRUD() {
         List<NPC> npcList = npcRepository.findAll();
         return npcList;
     }
 
     @Override
-    public NPC searchById(Integer id) {
+    public NPC searchByIdCRUD(Integer id) {
         NPC npc = npcRepository.findById(id).orElse(null);
         return npc;
     }
 
     @Override
-    public void saveNPC(NPC npc) {
+    public void saveCRUD(NPC npc) {
         npcRepository.save(npc);
     }
 
     @Override
-    public void deleteNPC(NPC npc) {
+    public void deleteCRUD(NPC npc) {
         npcRepository.delete(npc);
     }
 

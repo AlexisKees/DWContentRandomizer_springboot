@@ -3,13 +3,14 @@ package dw.randomizer.service;
 import dw.randomizer.model.Area;
 import dw.randomizer.model.Dungeon;
 import dw.randomizer.presentation.ViewAll;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Scanner;
 
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
-
+@Service
 public class DungeonAreaService {
 
     public static void showOptions(Scanner dataInput, Area area, Dungeon dungeon,List<Area> areaList) {

@@ -5,6 +5,7 @@ import dw.randomizer.model.*;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.QuestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Scanner;
@@ -12,30 +13,31 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
+@Service
 public class QuestService implements IQuestCRUDService {
 
     @Autowired
     QuestRepository questRepository;
 
     @Override
-    public List<Quest> listQuest() {
+    public List<Quest> listCRUD() {
         List<Quest> questList = questRepository.findAll();
         return questList;
     }
 
     @Override
-    public Quest searchById(Integer id) {
+    public Quest searchByIdCRUD(Integer id) {
         Quest quest = questRepository.findById(id).orElse(null);
         return quest;
     }
 
     @Override
-    public void saveQuest(Quest quest) {
+    public void saveCRUD(Quest quest) {
         questRepository.save(quest);
     }
 
     @Override
-    public void deleteQuest(Quest quest) {
+    public void deleteCRUD(Quest quest) {
         questRepository.delete(quest);
     }
 
