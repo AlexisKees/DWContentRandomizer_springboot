@@ -52,14 +52,14 @@ public class DungeonAreaService {
                         printWithFlair(area);
                     }
                     case 2 ->{
-                        if (area==null){
+                        if (area.getAreaType()==null){
                             area = new Area();
                             areaService.rollArea(area);
                         }
                         printWithFlair(area);
                     }
                     case 3 ->{
-                        if (area==null){
+                        if (area.getAreaType()==null){
                             area = new Area();
                             areaService.rollArea(area);
                         } else {
@@ -70,7 +70,7 @@ public class DungeonAreaService {
                     }
                     case 4 -> area = viewAll.run(dataInput, area);
                     case 5 -> {
-                        if (area==null){
+                        if (area.getAreaType()==null){
                             area = new Area();
                             areaService.rollArea(area);
                             sessionManager.add(Area.class,area.clone());

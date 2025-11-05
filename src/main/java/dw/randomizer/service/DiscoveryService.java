@@ -56,7 +56,6 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
 
     public void rollDiscovery(Discovery discovery){
         discovery.setCategory(PickFrom(DiscoveryArrays.DISCOVERY_CATEGORIES));
-//        if(discovery.getCategory()!=null) System.out.println("Category established"); else System.out.println("Failed trying to set category");
         switch (discovery.getCategory()){
              case "UNNATURAL FEATURE" -> discovery.setSubcategoriesTable(DiscoveryArrays.UNNATURAL_FEATURE_SUBCATEGORIES);
              case "NATURAL FEATURE" -> discovery.setSubcategoriesTable(DiscoveryArrays.NATURAL_FEATURE_SUBCATEGORIES);
@@ -72,7 +71,6 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
 
 
         discovery.setSubcategory(PickFrom(discovery.getSubcategoriesTable()));
-//        if(discovery.getSubcategory()!=null) System.out.println("Subcategory established"); else System.out.println("Failed trying to set subcategory. Category was: "+discovery.getCategory());
 
         switch (discovery.getSubcategory()){
 
@@ -286,7 +284,7 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
                         printWithFlair(discovery);
                     }
                     case 2 -> {
-                        if(discovery==null){
+                        if(discovery.getCategory()==null){
                             discovery = new Discovery();
                             rollDiscovery(discovery);
                             sessionManager.add(Discovery.class,discovery.clone());
@@ -296,7 +294,7 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
                     }
                     case 3 -> discovery = viewAll.run(dataInput,discovery);
                     case 4 -> {
-                        if(discovery==null){
+                        if(discovery.getCategory()==null){
                             discovery = new Discovery();
                             rollDiscovery(discovery);
                             sessionManager.add(Discovery.class,discovery.clone());

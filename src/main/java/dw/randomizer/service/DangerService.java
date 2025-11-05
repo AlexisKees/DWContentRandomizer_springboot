@@ -148,7 +148,7 @@ public class DangerService implements IGenericService<Danger>, IDangerCRUDServic
                         printWithFlair(danger);
                     }
                     case 2 -> {
-                        if (danger == null){
+                        if (danger.getCategory() == null){
                             danger = new Danger();
                             rollDanger(danger);
                         }
@@ -157,7 +157,7 @@ public class DangerService implements IGenericService<Danger>, IDangerCRUDServic
                     }
                     case 3 -> danger = viewAll.run(dataInput,danger);
                     case 4 -> {
-                        if (danger == null){
+                        if (danger.getCategory() == null){
                             danger = new Danger();
                             rollDanger(danger);
                             sessionManager.add(Danger.class,danger.clone());
