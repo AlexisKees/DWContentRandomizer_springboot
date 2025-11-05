@@ -1,9 +1,6 @@
 package dw.randomizer.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,9 +17,9 @@ public class Creature implements IPWClass<Creature> {
     private String category;
     private String subcategory;
     private String prompt;
-    private String[] categoryTable;
-    private String[] subcategoryTable;
-    private String[] promptTable;
+    @Transient private String[] categoryTable;
+    @Transient private String[] subcategoryTable;
+    @Transient private String[] promptTable;
     private String size;
     private String groupSize;
     private int hitPoints;

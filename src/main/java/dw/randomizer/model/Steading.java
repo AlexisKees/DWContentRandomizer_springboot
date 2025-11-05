@@ -1,9 +1,6 @@
 package dw.randomizer.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,9 +17,9 @@ public class Steading implements IPWClass<Steading> {
     private String name = "";
     private String size = "";
     private String tags = "";
-    private String[] featuresTable;
+    @Transient private String[] featuresTable;
     private String feature = "";
-    private String[] problemsTable;
+    @Transient private String[] problemsTable;
     private String problem = "";
     private String raceOfBuilders = "";
     private String alignment = "";

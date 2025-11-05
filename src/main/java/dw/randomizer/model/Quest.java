@@ -27,7 +27,7 @@ public class Quest implements IPWClass<Quest> {
     private Dungeon dungeon;
 
     @OneToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "npc_id", nullable = false)
+    @JoinColumn(name = "quest_giver_id", nullable = false)
     private NPC questGiver;
 
     private String oneLiner;

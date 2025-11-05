@@ -8,6 +8,8 @@ import dw.randomizer.model.Follower;
 import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.FollowerRepository;
+import dw.randomizer.service.crud.IFollowerCRUDService;
+import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,18 +23,20 @@ import static dw.randomizer.service.GenericFunctions.printWithFlair;
 public class FollowerService implements IGenericService<Follower>, IFollowerCRUDService {
 
     @Autowired
+    private SessionManager sessionManager;
+    @Autowired
+    private ViewAll viewAll;
+    @Autowired
     FollowerRepository followerRepository;
 
     @Override
     public List<Follower> listCRUD() {
-        List<Follower> followerList = followerRepository.findAll();
-        return followerList;
+        return followerRepository.findAll();
     }
 
     @Override
     public Follower searchByIdCRUD(Integer id) {
-        Follower follower = followerRepository.findById(id).orElse(null);
-        return follower;
+        return followerRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -45,9 +49,9 @@ public class FollowerService implements IGenericService<Follower>, IFollowerCRUD
         followerRepository.delete(follower);
     }
 
-    public static void rollFollower(Follower follower){
-        int rarity = Rolls.Roll1d12();
-        switch (CreatureArrays.SUBCATEGORIES_HUMANOID[rarity]) {
+    public void rollFollower(Follower follower){
+        String rarity = PickFrom(CreatureArrays.SUBCATEGORIES_HUMANOID);
+        switch (rarity) {
             case "Uncommon" -> follower.setRaceTable(CreatureArrays.PROMPTS_HUMANOID_UNCOMMON);
             case "Rare" -> follower.setRaceTable(CreatureArrays.PROMPTS_HUMANOID_RARE);
             default -> follower.setRaceTable(CreatureArrays.PROMPTS_HUMANOID_COMMON);
@@ -84,7 +88,7 @@ public class FollowerService implements IGenericService<Follower>, IFollowerCRUD
         rollFollowerDetails(follower);
     }
 
-    public static void rollFollowerDetails(Follower follower){
+    public void rollFollowerDetails(Follower follower){
         follower.setQualityString(PickFrom(NPCArrays.FOLLOWER_QUALITY));
         switch (follower.getQualityString()){
             case "A liability: Quality -1, +0 tags" -> follower.setQuality(follower.getQuality()-1);
@@ -150,7 +154,7 @@ public class FollowerService implements IGenericService<Follower>, IFollowerCRUD
 
     }
 
-    public static void addTag(Follower f){
+    public void addTag(Follower f){
         String tag;
         boolean tagAlreadyExists;
         do {
@@ -162,14 +166,14 @@ public class FollowerService implements IGenericService<Follower>, IFollowerCRUD
         else f.setTags(f.getTags()+", "+tag.toLowerCase());
     }
 
-    public static void addTag(Follower f, String tag){
+    public void addTag(Follower f, String tag){
         boolean tagAlreadyExists = ((f.getTags().contains(tag))||(f.getTags().contains(tag.toLowerCase())));
 
         if (f.getTags().isEmpty()) f.setTags(tag);
         else if (!tagAlreadyExists) f.setTags(f.getTags()+", "+tag.toLowerCase());
     }
 
-    public static void reviseBackground(Follower follower){
+    public void reviseBackground(Follower follower){
         switch (follower.getBackground()){
             case "Life of servitude/oppression: +meek" -> addTag(follower, "Meek");
             case "Past prime: -1 to Quality, +1 wise" ->{
@@ -192,7 +196,7 @@ public class FollowerService implements IGenericService<Follower>, IFollowerCRUD
         }
     }
 
-    public static void removeTag(Follower follower){
+    public void removeTag(Follower follower){
         String str;
         if (!follower.getTags().contains(",")) follower.setTags("");
         else {
@@ -203,10 +207,10 @@ public class FollowerService implements IGenericService<Follower>, IFollowerCRUD
     }
 
     @Override
-    public void showOptions(Scanner dataInput, Follower follower, List<Follower> followerList) {
+    public String showOptions(Scanner dataInput, Follower follower) {
         int option;
         System.out.println("WELCOME TO THE FOLLOWER GENERATOR\n");
-
+        String menu = "MAIN_MENU";
         try{
 
             do {
@@ -217,7 +221,7 @@ public class FollowerService implements IGenericService<Follower>, IFollowerCRUD
                         3) Reroll this follower
                         4) View list of generated follower
                         5) Export current follower
-                        6) Main menu
+                        0) Main menu
                         
                         \tOption:\s""");
 
@@ -227,43 +231,44 @@ public class FollowerService implements IGenericService<Follower>, IFollowerCRUD
                 switch (option){
                     case 1 -> {
                         follower = new Follower();
-                        FollowerService.rollFollower(follower);
-                        followerList.add(follower.clone());
+                        rollFollower(follower);
+                        sessionManager.add(Follower.class,follower.clone());
                         printWithFlair(follower);
                     }
                     case 2 ->{
-                        if (follower==null){
+                        if (follower.getRace()==null){
                             follower = new Follower();
-                            FollowerService.rollFollower(follower);
+                            rollFollower(follower);
                         }
                         printWithFlair(follower);
                     }
                     case 3 ->{
-                        if (follower==null){
+                        if (follower.getRace()==null){
                             follower = new Follower();
-                            FollowerService.rollFollower(follower);
+                            rollFollower(follower);
                         } else {
-                            FollowerService.rollFollowerDetails(follower);
+                            rollFollowerDetails(follower);
                         }
-                        followerList.add(follower.clone());
+                        sessionManager.add(Follower.class,follower.clone());
                         printWithFlair(follower);
                     }
-                    case 4 -> follower = new ViewAll().run(dataInput, followerList, follower, Follower.class);
+                    case 4 -> follower = viewAll.run(dataInput, follower);
                     case 5 -> {
-                        if (follower==null){
+                        if (follower.getRace()==null){
                             follower = new Follower();
-                            FollowerService.rollFollower(follower);
-                            followerList.add(follower.clone());
+                            rollFollower(follower);
+                            sessionManager.add(Follower.class,follower.clone());
                         }
                         GenericFunctions.exportPW(follower);
                     }
-                    case 6 -> System.out.println("Going back to DUNGEON GENERATOR");
+                    case 0 -> System.out.println("Going back to main menu");
                 }
-            } while (option!=6);
+            } while (option!=0);
 
 
         }catch (Exception e){
             System.out.println("\nPlease choose a valid option.\n");
         }
+        return menu;
     }
 }

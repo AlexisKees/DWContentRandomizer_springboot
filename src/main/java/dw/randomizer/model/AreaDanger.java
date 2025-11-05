@@ -17,7 +17,7 @@ public class AreaDanger implements IPWClass<AreaDanger> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String category;
-    private String[] promptTable;
+    @Transient private String[] promptTable;
     private String prompt;
     private String finalResult;
     private String oneLiner;

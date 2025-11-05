@@ -4,6 +4,8 @@ import dw.randomizer.data.QuestArrays;
 import dw.randomizer.model.*;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.QuestRepository;
+import dw.randomizer.service.crud.IQuestCRUDService;
+import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +19,26 @@ import static dw.randomizer.service.GenericFunctions.printWithFlair;
 public class QuestService implements IQuestCRUDService {
 
     @Autowired
+    private ViewAll viewAll;
+
+    @Autowired
+    private DungeonService dungeonService;
+    @Autowired
+    private BiomeService biomeService;
+    @Autowired
+    private NPCService npcService;
+
+    @Autowired
     QuestRepository questRepository;
 
     @Override
     public List<Quest> listCRUD() {
-        List<Quest> questList = questRepository.findAll();
-        return questList;
+        return questRepository.findAll();
     }
 
     @Override
     public Quest searchByIdCRUD(Integer id) {
-        Quest quest = questRepository.findById(id).orElse(null);
-        return quest;
+        return questRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -41,7 +51,7 @@ public class QuestService implements IQuestCRUDService {
         questRepository.delete(quest);
     }
 
-    public static void rollQuest(Quest quest){
+    public void rollQuest(Quest quest){
         quest.setTask(PickFrom(QuestArrays.TASK));
         quest.setRelevance(PickFrom(QuestArrays.RELEVANCE));
         quest.setReward(PickFrom(QuestArrays.REWARD));
@@ -49,9 +59,9 @@ public class QuestService implements IQuestCRUDService {
         quest.setQuestGiver(new NPC());
         quest.setDungeon(new Dungeon());
         quest.setBiome(new Biome());
-        DungeonService.rollDungeon(quest.getDungeon());
-        NPCService.rollFeatures(quest.getQuestGiver());
-        BiomeService.rollBiome(quest.getBiome());
+        dungeonService.rollDungeon(quest.getDungeon());
+        npcService.rollFeatures(quest.getQuestGiver());
+        biomeService.rollBiome(quest.getBiome());
         quest.setOneLiner(String.format("%s's %s quest",quest.getQuestGiver().getName(),quest.getTask()));
 
         quest.setBrief(String.format("""
@@ -64,9 +74,10 @@ public class QuestService implements IQuestCRUDService {
                 """, quest.getTask(),quest.getRelevance(),quest.getReward(),quest.getQuestGiver().getOneLiner(),quest.getDungeon().getName(), quest.getBiome().getOneLiner()));
     }
 
-    public static void showOptions(Scanner dataInput, Quest quest, List<Quest> questList, List<NPC> npcList, List<Dungeon> dungeonList, List<Biome> biomeList) {
-        var option = 0;
 
+    public String showOptions(Scanner dataInput, Quest quest, List<Quest> questList, List<NPC> npcList, List<Dungeon> dungeonList, List<Biome> biomeList) {
+        var option = 0;
+        String menu = "MAIN_MENU";
         System.out.println("WELCOME TO THE QUEST GENERATOR\n");
 
         do {
@@ -76,9 +87,10 @@ public class QuestService implements IQuestCRUDService {
                         1) Create new random quest
                         2) Quest giver details
                         3) Quest location details
-                        4) See previously generated quests
-                        5) Print quest
-                        6) Main menu
+                        4) See current quest
+                        5) See previously generated quests
+                        6) Print quest
+                        0) Main menu
                         
                         \tOption:\s""");
                 option = Integer.parseInt(dataInput.nextLine());
@@ -87,7 +99,7 @@ public class QuestService implements IQuestCRUDService {
                 switch (option) {
                     case 1 -> {
                         quest = new Quest();
-                        QuestService.rollQuest(quest);
+                        rollQuest(quest);
                         questList.add(quest.clone());
                         npcList.add(quest.getQuestGiver().clone());
                         dungeonList.add(quest.getDungeon().clone());
@@ -95,41 +107,43 @@ public class QuestService implements IQuestCRUDService {
                         printWithFlair(quest.getBrief());
                     }
                     case 2 -> {
-                        if(quest==null){
+                        if(quest.getTask()==null){
                             quest = new Quest();
-                            QuestService.rollQuest(quest);
+                            rollQuest(quest);
                             questList.add(quest.clone());
                             npcList.add(quest.getQuestGiver().clone());
                             dungeonList.add(quest.getDungeon().clone());
                             biomeList.add(quest.getBiome().clone());
-                            printWithFlair(quest);
                         }
-                        System.out.println("QUEST GIVER:\n\n"+quest.getQuestGiver());
+                        printWithFlair("QUEST GIVER:\n\n"+quest.getQuestGiver());
                     }
                     case 3 -> {
-                        if(quest==null){
+                        if(quest.getTask()==null){
                             quest = new Quest();
-                            QuestService.rollQuest(quest);
+                            rollQuest(quest);
                             questList.add(quest.clone());
                             npcList.add(quest.getQuestGiver().clone());
                             dungeonList.add(quest.getDungeon().clone());
                             biomeList.add(quest.getBiome().clone());
-                            printWithFlair(quest);
                         }
-                        System.out.println("QUEST LOCATION - BIOME:\n\n"+quest.getBiome());
-                        System.out.println("QUEST LOCATION - DUNGEON:\n\n"+quest.getDungeon());
+                        printWithFlair("QUEST LOCATION - BIOME:\n\n"+quest.getBiome()+"\n\n"+"QUEST LOCATION - DUNGEON:\n\n"+quest.getDungeon());
                     }
-                    case 4 -> quest = new ViewAll().run(dataInput,questList,quest, Quest.class);
-                    case 5 -> {
-                        if (quest == null) {
+                    case 4 -> {
+                        if(quest.getTask()==null){
                             quest = new Quest();
-                            QuestService.rollQuest(quest);
-                            quest.setQuestGiver(new NPC());
-                            quest.setDungeon(new Dungeon());
-                            quest.setBiome(new Biome());
-                            DungeonService.rollDungeon(quest.getDungeon());
-                            NPCService.rollFeatures(quest.getQuestGiver());
-                            BiomeService.rollBiome(quest.getBiome());
+                            rollQuest(quest);
+                            questList.add(quest.clone());
+                            npcList.add(quest.getQuestGiver().clone());
+                            dungeonList.add(quest.getDungeon().clone());
+                            biomeList.add(quest.getBiome().clone());
+                        }
+                        printWithFlair(quest);
+                    }
+                    case 5-> quest = viewAll.run(dataInput,quest);
+                    case 6 -> {
+                        if(quest.getTask() == null) {
+                            quest = new Quest();
+                            rollQuest(quest);
                             questList.add(quest.clone());
                             npcList.add(quest.getQuestGiver().clone());
                             dungeonList.add(quest.getDungeon().clone());
@@ -137,13 +151,14 @@ public class QuestService implements IQuestCRUDService {
                         }
                         GenericFunctions.exportPW(quest);
                     }
-                    case 6 -> System.out.println("\nReturning to main menu...\n");
+                    case 0 -> System.out.println("Going back to main menu");
                     default -> System.out.print("\nInvalid number!\n\n");
                 }
             } catch (Exception e) {
                 System.out.println("\nPlease choose a valid option.\n");
             }
         }
-        while (option != 6);
+        while (option != 0);
+        return menu;
     }
 }

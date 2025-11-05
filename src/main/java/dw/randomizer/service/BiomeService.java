@@ -3,7 +3,10 @@ package dw.randomizer.service;
 import dw.randomizer.data.BiomeArrays;
 import dw.randomizer.data.DetailsArrays;
 import dw.randomizer.model.Biome;
+import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.BiomeRepository;
+import dw.randomizer.service.crud.IBiomeCRUDService;
+import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +18,17 @@ import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 @Service
 public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
+
+    @Autowired
+    private ViewAll viewAll;
+
+    @Autowired
+    private SessionManager sessionManager;
+
     @Autowired
     private BiomeRepository biomeRepository;
 
-    public static void rollBiome(Biome biome){
+    public void rollBiome(Biome biome){
 //        private String biome;
         biome.setBiome(PickFrom(BiomeArrays.BIOME));
 //        private String weather;
@@ -38,7 +48,7 @@ public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
         biome.setOneLiner(String.format("%s %s",biome.getPopulation(),biome.getBiome()));
     }
 
-    public static void reRollDetails(Biome biome){
+    public void reRollDetails(Biome biome){
         //        private String weather;
         biome.setWeather(PickFrom(BiomeArrays.WEATHER));
 //        private String weatherIntensity;
@@ -58,10 +68,10 @@ public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
     }
 
     @Override
-    public void showOptions(Scanner dataInput, Biome biome, List<Biome> biomeList) {
+    public String showOptions(Scanner dataInput, Biome biome) {
         int option;
         System.out.println("WELCOME TO THE BIOME GENERATOR\n");
-
+        String menu = "MAIN_MENU";
         try{
             do {
                 System.out.print("""
@@ -71,7 +81,8 @@ public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
                         3) Reroll this biome
                         4) View list of generated biomes
                         5) Export current biome
-                        6) Main menu
+                        6) MANAGE DATABASE
+                        0) Main menu
                         
                         \tOption:\s""");
                 option = Integer.parseInt(dataInput.nextLine());
@@ -80,69 +91,71 @@ public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
                 switch (option){
                     case 1 ->{
                         biome = new Biome();
-                        BiomeService.rollBiome(biome);
-                        biomeList.add(biome.clone());
-                        printWithFlair(biome);
+                        rollBiome(biome);
+                        sessionManager.add(Biome.class,biome);
+                        printWithFlair(sessionManager.getSelected(Biome.class));
                     }
                     case 2 -> {
-                        if(biome==null){
+                        if(biome.getBiome()==null){
                             biome = new Biome();
-                            BiomeService.rollBiome(biome);
-                            biomeList.add(biome.clone());
+                            rollBiome(biome);
+                            sessionManager.add(Biome.class,biome);
                         }
-                        System.out.println(biome);
+                        printWithFlair(biome);
                     }
                     case 3 -> {
-                        if(biome==null){
+                        if(biome.getBiome()==null){
                             biome = new Biome();
-                            BiomeService.rollBiome(biome);
-                            biomeList.add(biome.clone());
+                            rollBiome(biome);
+                            sessionManager.add(Biome.class,biome);
                         } else {
-                            BiomeService.reRollDetails(biome);
-                            biomeList.add(biome.clone());
+                            reRollDetails(biome);
+                            sessionManager.add(Biome.class,biome);
                         }
-                        System.out.println(biome);
+                        printWithFlair(biome);
                     }
-//                    case 4 -> biome = new ViewAll().run(dataInput,biomeList,biome, Biome.class);
+                    case 4 -> biome = viewAll.run(dataInput,biome);
                     case 5 -> {
-                        if(biome==null){
+                        if(biome.getBiome()==null){
                             biome = new Biome();
-                            BiomeService.rollBiome(biome);
-                            biomeList.add(biome.clone());
+                            rollBiome(biome);
+                            sessionManager.add(Biome.class,biome);
                         }
                         GenericFunctions.exportPW(biome);
                     }
-                    case 6 -> System.out.println("\nReturning to main menu...\n");
+                    case 6 -> {
+                        return "DB_MENU";
+                    }
+                    case 0 -> System.out.println("Going back to main menu");
 
                 }
-            }while (option !=6);
+            }while (option !=0);
         }catch (Exception e){
-            System.out.println("\nPlease choose a valid option.\n");
+            System.out.println("\nPlease choose a valid option. Error: \n"+e.getMessage());
         }
+        return menu;
     }
 
     @Override
     public List<Biome> listCRUD() {
-        List<Biome> biomes = biomeRepository.findAll();
-        return biomes;
+        return biomeRepository.findAll();
     }
 
     @Override
     public Biome searchByIdCRUD(Integer id) {
-        Biome biome = biomeRepository.findById(id).orElse(null);
-        return biome;
+        return biomeRepository.findById(id).orElse(null);
     }
 
     @Override
     public void saveCRUD(Biome biome) {
         biomeRepository.save(biome);
-
+        printWithFlair("Element saved to database!");
     }
 
     @Override
     public void deleteCRUD(Biome biome) {
         biomeRepository.delete(biome);
-
+        printWithFlair("Element removed from database!");
     }
 
 }

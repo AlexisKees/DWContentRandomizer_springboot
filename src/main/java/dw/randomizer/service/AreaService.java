@@ -2,11 +2,17 @@ package dw.randomizer.service;
 
 import dw.randomizer.data.DungeonArrays;
 import dw.randomizer.model.Area;
+import dw.randomizer.model.AreaDanger;
+import dw.randomizer.model.AreaDiscovery;
+import dw.randomizer.model.Biome;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.AreaRepository;
+import dw.randomizer.service.crud.IAreaCRUDService;
+import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -18,18 +24,26 @@ import static dw.randomizer.service.GenericFunctions.printWithFlair;
 public class AreaService implements IGenericService<Area>, IAreaCRUDService {
 
     @Autowired
-    AreaRepository areaRepository;
+    private SessionManager sessionManager;
+    @Autowired
+    private ViewAll viewAll;
+
+    @Autowired
+    private AreaDangerService areaDangerService;
+    @Autowired
+    private AreaDiscoveryService areaDiscoveryService;
+    @Autowired
+    private AreaRepository areaRepository;
 
     @Override
     public List<Area> listCRUD() {
-        List<Area> areaList = areaRepository.findAll();
-        return areaList;
+        return areaRepository.findAll();
     }
 
     @Override
     public Area searchByIdCRUD(Integer id) {
-        Area area = areaRepository.findById(id).orElse(null);
-        return area;
+
+        return areaRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -42,14 +56,14 @@ public class AreaService implements IGenericService<Area>, IAreaCRUDService {
         areaRepository.delete(area);
     }
 
-    public static void rollArea(Area area) {
+    public void rollArea(Area area) {
         area.setAreaType(PickFrom(DungeonArrays.AREA_TYPE));
         area.setOneLiner(area.getAreaType());
         rollAreaDetails(area);
 
     }
 
-    public static void rollAreaDetails(Area area){
+    public void rollAreaDetails(Area area){
         area.setRarity(PickFrom(DungeonArrays.AREA_RARITY));
 
         int rollRarity = UniversalRoll(DungeonArrays.AREA_RARITY);
@@ -98,17 +112,46 @@ public class AreaService implements IGenericService<Area>, IAreaCRUDService {
         area.setAreaDressing(PickFrom(DungeonArrays.AREA_DRESSING));
         if (Objects.equals(area.getAreaDressing(),"roll twice") || Objects.equals(area.getAreaDressing(),"ROLL TWICE")) area.setAreaDressing(rollTwice(DungeonArrays.AREA_DRESSING));
 
-        area.addDangers();
-        area.addDiscoveries();
+        addDangers(area);
+        addDiscoveries(area);
+    }
+
+    public void addDiscoveries(Area area){
+        List<AreaDiscovery> list = new ArrayList<>();
+
+        if (area.getDiscoveriesAmount()>0) {
+            int i;
+            for (i = 1; i <= area.getDiscoveriesAmount(); i++) {
+                AreaDiscovery d = new AreaDiscovery();
+                areaDiscoveryService.rollAreaDiscovery(d);
+                list.add(d.clone());
+            }
+            area.setDiscoveries(list);
+        }
+
+    }
+
+
+    public void addDangers(Area area){
+        List<AreaDanger> list = new ArrayList<>();
+
+        if (area.getDangersAmount()>0) {
+            int i;
+            for (i = 1; i <= area.getDangersAmount(); i++) {
+                AreaDanger d = new AreaDanger();
+                areaDangerService.rollAreaDanger(d);
+                list.add(d.clone());
+            }
+        }
+        area.setDangers(list);
     }
 
     @Override
-    public void showOptions(Scanner dataInput, Area area, List<Area> areaList) {
+    public String showOptions(Scanner dataInput, Area area) {
         int option;
         System.out.println("WELCOME TO THE AREA GENERATOR\n");
-
+        String menu = "MAIN_MENU";
         try{
-
             do {
                 System.out.print("""
                         \nPlease select an option:
@@ -117,7 +160,8 @@ public class AreaService implements IGenericService<Area>, IAreaCRUDService {
                         3) Reroll this area
                         4) View list of generated area
                         5) Export current area
-                        6) Main menu
+                        6) MANAGE DB
+                        0) Main menu
                         
                         \tOption:\s""");
 
@@ -127,44 +171,49 @@ public class AreaService implements IGenericService<Area>, IAreaCRUDService {
                 switch (option){
                     case 1 -> {
                         area = new Area();
-                        AreaService.rollArea(area);
-                        areaList.add(area.clone());
-                        printWithFlair(area);
+                        rollArea(area);
+                        sessionManager.add(Area.class,area);
+                        printWithFlair(sessionManager.getSelected(Area.class));
                     }
                     case 2 ->{
-                        if (area==null){
+                        if (area.getAreaType()==null){
                             area = new Area();
-                            areaList.add(area.clone());
-                            AreaService.rollArea(area);
+                            sessionManager.add(Area.class,area);
+                            rollArea(area);
                         }
                         printWithFlair(area);
                     }
                     case 3 ->{
-                        if (area==null){
+                        if (area.getAreaType()==null){
                             area = new Area();
-                            AreaService.rollArea(area);
-                            areaList.add(area.clone());
+                            rollArea(area);
+                            sessionManager.add(Area.class,area);
                         } else {
-                            AreaService.rollAreaDetails(area);
-                            areaList.add(area.clone());
+                            rollAreaDetails(area);
+                            sessionManager.add(Area.class,area);
                         }
                         printWithFlair(area);
                     }
-                    case 4 -> area = new ViewAll().run(dataInput, areaList, area, Area.class);
+                    case 4 -> area = viewAll.run(dataInput, area);
                     case 5 -> {
-                        if (area==null){
+                        if (area.getAreaType()==null){
                             area = new Area();
-                            AreaService.rollArea(area);
+                            rollArea(area);
                         }
                         GenericFunctions.exportPW(area);
                     }
-                    case 6 -> System.out.println("Going back to main menu");
+                    case 6 -> {
+                        return "DB_MENU";
+                    }
+                    case 0 -> System.out.println("Going back to main menu");
                 }
-            } while (option!=6);
+            } while (option!=0);
 
 
         }catch (Exception e){
             System.out.println("\nPlease choose a valid option.\n");
         }
+
+        return menu;
     }
 }

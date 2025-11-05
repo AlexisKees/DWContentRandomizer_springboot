@@ -1,4 +1,4 @@
-package dw.randomizer.service;
+package dw.randomizer.service.crud;
 
 import dw.randomizer.model.Creature;
 

@@ -6,6 +6,8 @@ import dw.randomizer.model.*;
 import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.DiscoveryRepository;
+import dw.randomizer.service.crud.IDiscoveryCRUDService;
+import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,18 +21,27 @@ import static dw.randomizer.service.GenericFunctions.printWithFlair;
 public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryCRUDService {
 
     @Autowired
-    DiscoveryRepository discoveryRepository;
+    private SessionManager sessionManager;
+    @Autowired
+    private ViewAll viewAll;
+    @Autowired
+    private DungeonService dungeonService;
+    @Autowired
+    private SteadingService steadingService;
+    @Autowired
+    private CreatureService creatureService;
+
+    @Autowired
+    private DiscoveryRepository discoveryRepository;
 
     @Override
     public List<Discovery> listCRUD() {
-        List<Discovery> discoveryList = discoveryRepository.findAll();
-        return discoveryList;
+        return discoveryRepository.findAll();
     }
 
     @Override
     public Discovery searchByIdCRUD(Integer id) {
-        Discovery discovery = discoveryRepository.findById(id).orElse(null);
-        return discovery;
+        return discoveryRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -43,7 +54,7 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
         discoveryRepository.delete(discovery);
     }
 
-    public static void rollDiscovery(Discovery discovery){
+    public void rollDiscovery(Discovery discovery){
         discovery.setCategory(PickFrom(DiscoveryArrays.DISCOVERY_CATEGORIES));
 //        if(discovery.getCategory()!=null) System.out.println("Category established"); else System.out.println("Failed trying to set category");
         switch (discovery.getCategory()){
@@ -97,23 +108,23 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
                 discovery.setOneLiner(discovery.getFinalResult());
             }
             case "Landmark ODDITY" -> {
-                String oddity = CreatureService.rollOddity();
+                String oddity = creatureService.rollOddity();
                 discovery.setFinalResult("Landmark "+oddity);
                 discovery.setOneLiner(discovery.getFinalResult());
             }
             case "notable BEAST" -> {
-                String beast = CreatureService.rollBeast();
+                String beast = creatureService.rollBeast();
                 discovery.setFinalResult("Notable "+beast);
                 discovery.setOneLiner(discovery.getFinalResult());
             }
             case "useful BEAST" -> {
-                String beast = CreatureService.rollBeast();
+                String beast = creatureService.rollBeast();
                 discovery.setFinalResult("Useful "+beast);
                 discovery.setOneLiner(discovery.getFinalResult());
             }
             case "bones of CREATURE" -> {
                 Creature c = new Creature();
-                CreatureService.rollAttributes(c);
+                creatureService.rollAttributes(c);
                 discovery.setFinalResult(String.format("""
                         Bones of a creature:
                         %s""", c));
@@ -121,7 +132,7 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
             }
             case "CREATURE carcass" -> {
                 Creature c = new Creature();
-                CreatureService.rollAttributes(c);
+                creatureService.rollAttributes(c);
                 discovery.setFinalResult(String.format("""
                         Creature carcass:
                         %s""", c));
@@ -129,7 +140,7 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
             }
             case "Creature" -> {
                 Creature c = new Creature();
-                CreatureService.rollAttributes(c);
+                creatureService.rollAttributes(c);
                 discovery.setFinalResult(c.toString());
                 discovery.setOneLiner(c.getOneLiner());
             }
@@ -141,19 +152,19 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
                 discovery.setOneLiner(discovery.getFinalResult());
             }
             case "Enigmatic ODDITY" -> {
-                String oddity = CreatureService.rollOddity();
+                String oddity = creatureService.rollOddity();
                 discovery.setFinalResult("Enigmatic "+oddity);
                 discovery.setOneLiner(discovery.getFinalResult());
             }
             case "DUNGEON" -> {
                 Dungeon d = new Dungeon();
-                DungeonService.rollDungeon(d);
+                dungeonService.rollDungeon(d);
                 discovery.setFinalResult("Dungeon in ruins:\n"+d);
                 discovery.setOneLiner("Dungeon in ruins: "+d.getOneLiner());
             }
             case "STEADING" -> {
                 Steading s = new Steading();
-                SteadingService.rollSteading(s);
+                steadingService.rollSteading(s);
                 discovery.setFinalResult("Steading in ruins:\n"+s);
                 discovery.setOneLiner("Steading in ruins: "+s.getOneLiner());
             }
@@ -177,25 +188,25 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
             }
             case "village" -> {
                 Steading s = new Steading();
-                SteadingService.rollSteading(s,"VILLAGE");
+                steadingService.rollSteading(s,"VILLAGE");
                 discovery.setFinalResult(s.toString());
                 discovery.setOneLiner("Village: "+s.getOneLiner());
             }
             case "town" -> {
                 Steading s = new Steading();
-                SteadingService.rollSteading(s,"TOWN");
+                steadingService.rollSteading(s,"TOWN");
                 discovery.setFinalResult(s.toString());
                 discovery.setOneLiner("Town: "+s.getOneLiner());
             }
             case "keep" -> {
                 Steading s = new Steading();
-                SteadingService.rollSteading(s,"KEEP");
+                steadingService.rollSteading(s,"KEEP");
                 discovery.setFinalResult(s.toString());
                 discovery.setOneLiner("Keep: "+s.getOneLiner());
             }
             case "city" -> {
                 Steading s = new Steading();
-                SteadingService.rollSteading(s,"CITY");
+                steadingService.rollSteading(s,"CITY");
                 discovery.setFinalResult(s.toString());
                 discovery.setOneLiner("City: "+s.getOneLiner());
             }
@@ -209,20 +220,20 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
 
     }
 
-    private static void rollRuins(Discovery discovery){
+    private void rollRuins(Discovery discovery){
         String ruin = PickFrom(DiscoveryArrays.RUIN_PROMPTS);
 
         switch (ruin) {
 
             case "DUNGEON" -> {
                 Dungeon d = new Dungeon();
-                DungeonService.rollDungeon(d);
+                dungeonService.rollDungeon(d);
                 discovery.setFinalResult("A lair in a Dungeon in ruins:\n"+d);
                 discovery.setOneLiner("A lair in a Dungeon in ruins: "+d.getOneLiner());
             }
             case "STEADING" -> {
                 Steading s = new Steading();
-                SteadingService.rollSteading(s);
+                steadingService.rollSteading(s);
                 discovery.setFinalResult("A lair in a "+s.getSize().toLowerCase()+" in ruins:\n"+s);
                 discovery.setOneLiner("A lair in a "+s.getSize().toLowerCase()+" in ruins:\n"+s.getOneLiner());
             }
@@ -249,10 +260,10 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
     }
 
     @Override
-    public void showOptions(Scanner dataInput, Discovery discovery, List<Discovery> discoveryList) {
+    public String showOptions(Scanner dataInput, Discovery discovery) {
         int option;
         System.out.println("WELCOME TO THE DISCOVERY GENERATOR\n");
-
+        String menu = "MAIN_MENU";
         try{
             do {
                 System.out.print("""
@@ -261,7 +272,7 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
                         2) View current discovery
                         3) View list of generated discoveries
                         4) Export current
-                        5) Main menu
+                        0) Main menu
                         
                         \tOption:\s""");
                 option = Integer.parseInt(dataInput.nextLine());
@@ -270,35 +281,36 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
                 switch (option){
                     case 1 ->{
                         discovery = new Discovery();
-                        DiscoveryService.rollDiscovery(discovery);
-                        discoveryList.add(discovery.clone());
+                        rollDiscovery(discovery);
+                        sessionManager.add(Discovery.class,discovery.clone());
                         printWithFlair(discovery);
                     }
                     case 2 -> {
                         if(discovery==null){
                             discovery = new Discovery();
-                            DiscoveryService.rollDiscovery(discovery);
-                            discoveryList.add(discovery.clone());
+                            rollDiscovery(discovery);
+                            sessionManager.add(Discovery.class,discovery.clone());
                         }
                         printWithFlair(discovery);
                         System.out.println("\n");
                     }
-                    case 3 -> discovery = new ViewAll().run(dataInput,discoveryList,discovery, Discovery.class);
+                    case 3 -> discovery = viewAll.run(dataInput,discovery);
                     case 4 -> {
                         if(discovery==null){
                             discovery = new Discovery();
-                            DiscoveryService.rollDiscovery(discovery);
-                            discoveryList.add(discovery.clone());
+                            rollDiscovery(discovery);
+                            sessionManager.add(Discovery.class,discovery.clone());
                         }
                         GenericFunctions.exportPW(discovery);
                     }
-                    case 5 -> System.out.println("\nReturning to main menu...\n");
+                    case 0 -> System.out.println("Going back to main menu");
 
                 }
-            }while (option !=5);
+            }while (option !=0);
         }catch (Exception e){
             System.out.println("\nPlease choose a valid option.\n");
         }
+        return menu;
     }
 
 

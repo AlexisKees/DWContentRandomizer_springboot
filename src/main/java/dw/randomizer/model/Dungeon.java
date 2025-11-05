@@ -17,12 +17,12 @@ public class Dungeon implements IPWClass<Dungeon> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String nameTemplate;
+    @Transient private String nameTemplate;
     private String name;
     private String size;
     private int rooms;
     private int themesAmount;
-    private String[] themes;
+    @Transient private String[] themes;
     private String themePrompt;
     private String form;
     private String exits;

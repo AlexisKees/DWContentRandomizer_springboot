@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +25,10 @@ public class Area implements IPWClass<Area> {
     private String areaDressing;
     private int discoveriesAmount;
     @OneToMany(mappedBy = "area", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AreaDiscovery> discoveries = new ArrayList<>();
+    @Transient private List<AreaDiscovery> discoveries = new ArrayList<>();
     private int dangersAmount;
     @OneToMany(mappedBy = "area", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AreaDanger> dangers = new ArrayList<>();
+    @Transient private List<AreaDanger> dangers = new ArrayList<>();
     private String oneLiner;
 
     @ManyToOne
@@ -62,35 +63,7 @@ public class Area implements IPWClass<Area> {
 
 
 
-   public void addDiscoveries(){
-       List<AreaDiscovery> list = new ArrayList<>();
 
-       if (this.getDiscoveriesAmount()>0) {
-           int i;
-           for (i = 1; i <= this.getDiscoveriesAmount(); i++) {
-               AreaDiscovery d = new AreaDiscovery();
-               AreaDiscoveryService.rollAreaDiscovery(d);
-               list.add(d.clone());
-           }
-           this.setDiscoveries(list);
-       }
-
-   }
-
-
-    public void addDangers(){
-        List<AreaDanger> list = new ArrayList<>();
-
-        if (this.getDangersAmount()>0) {
-            int i;
-            for (i = 1; i <= this.getDangersAmount(); i++) {
-                AreaDanger d = new AreaDanger();
-                AreaDangerService.rollAreaDanger(d);
-                list.add(d.clone());
-            }
-        }
-        this.setDangers(list);
-    }
 
 
 

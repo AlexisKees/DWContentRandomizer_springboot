@@ -2,29 +2,51 @@ package dw.randomizer.service.util;
 
 import dw.randomizer.model.*;
 import dw.randomizer.service.*;
+import dw.randomizer.service.crud.IGenericCRUDService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class ClassIdentifier {
-    private static final Map<Class<?>, IGenericService<?>> map = new HashMap<>();
+    private final Map<Class<?>, IGenericService<?>> serviceMap = new HashMap<>();
 
-    static {
-        map.put(Area.class,new AreaService());
-        map.put(Biome.class,new BiomeService());
-        map.put(Creature.class,new CreatureService());
-        map.put(Danger.class,new DangerService());
-        map.put(Discovery.class,new DiscoveryService());
-        map.put(AreaDanger.class,new AreaDangerService());
-        map.put(AreaDiscovery.class,new AreaDiscoveryService());
-        map.put(Follower.class,new FollowerService());
-        map.put(NPC.class,new NPCService());
-        map.put(Steading.class,new SteadingService());
+
+    @Autowired
+    public ClassIdentifier(
+            AreaService areaService,
+            BiomeService biomeService,
+            CreatureService creatureService,
+            DangerService dangerService,
+            DiscoveryService discoveryService,
+            AreaDangerService areaDangerService,
+            AreaDiscoveryService areaDiscoveryService,
+            FollowerService followerService,
+            NPCService npcService,
+            SteadingService steadingService
+    ) {
+        serviceMap.put(Area.class, areaService);
+        serviceMap.put(Biome.class, biomeService);
+        serviceMap.put(Creature.class, creatureService);
+        serviceMap.put(Danger.class, dangerService);
+        serviceMap.put(Discovery.class, discoveryService);
+        serviceMap.put(AreaDanger.class, areaDangerService);
+        serviceMap.put(AreaDiscovery.class, areaDiscoveryService);
+        serviceMap.put(Follower.class, followerService);
+        serviceMap.put(NPC.class, npcService);
+        serviceMap.put(Steading.class, steadingService);
     }
 
+
     @SuppressWarnings("unchecked")
-    public static <T extends IPWClass> IGenericService<T> getServiceFile(Class<T> c) {
-        return (IGenericService<T>) map.get(c);
+    public <T extends IPWClass> IGenericService<T> getServiceFile(Class<T> c) {
+        return (IGenericService<T>) serviceMap.get(c);
+    }
+    @SuppressWarnings("unchecked")
+    public <T extends IPWClass> IGenericCRUDService<T> getCRUDFile(Class<T> c){
+        return (IGenericCRUDService<T>) serviceMap.get(c);
     }
 }
 

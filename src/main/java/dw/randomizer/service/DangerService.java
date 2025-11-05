@@ -5,6 +5,8 @@ import dw.randomizer.data.DetailsArrays;
 import dw.randomizer.model.*;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.DangerRepository;
+import dw.randomizer.service.crud.IDangerCRUDService;
+import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,18 +20,25 @@ import static dw.randomizer.service.GenericFunctions.printWithFlair;
 public class DangerService implements IGenericService<Danger>, IDangerCRUDService {
 
     @Autowired
-    DangerRepository dangerRepository;
+    private SessionManager sessionManager;
+
+    @Autowired
+    private ViewAll viewAll;
+
+    @Autowired
+    private CreatureService creatureService;
+
+    @Autowired
+    private DangerRepository dangerRepository;
 
     @Override
     public List<Danger> listCRUD() {
-        List<Danger> dangerList = dangerRepository.findAll();
-        return dangerList;
+        return dangerRepository.findAll();
     }
 
     @Override
     public Danger searchByIdCRUD(Integer id) {
-        Danger danger = dangerRepository.findById(id).orElse(null);
-        return danger;
+        return dangerRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -42,7 +51,7 @@ public class DangerService implements IGenericService<Danger>, IDangerCRUDServic
         dangerRepository.delete(danger);
     }
 
-    public static void rollDanger(Danger danger){
+    public void rollDanger(Danger danger){
         danger.setCategory(PickFrom(DangerArrays.DANGER_CATEGORIES));
 
         switch (danger.getCategory()){
@@ -66,39 +75,39 @@ public class DangerService implements IGenericService<Danger>, IDangerCRUDServic
 
         switch (danger.getPrompt()) {
         case "lesser elemental" -> {
-            String element = CreatureService.rollElement();
+            String element = creatureService.rollElement();
             danger.setFinalResult("lesser "+element+" elemental");
         }
         case "elemental" ->{
-            String element = CreatureService.rollElement();
+            String element = creatureService.rollElement();
             danger.setFinalResult(element+" elemental");
         }
         case "greater elemental" -> {
-            String element = CreatureService.rollElement();
+            String element = creatureService.rollElement();
             danger.setFinalResult("greater "+element+" elemental");
         }
         case "elemental lord" -> {
-            String element = CreatureService.rollElement();
+            String element = creatureService.rollElement();
             danger.setFinalResult(element+" elemental lord");
         }
         case "magical: natural + MAGIC TYPE" -> {
-            String magicType = CreatureService.rollMagicType();
+            String magicType = creatureService.rollMagicType();
             danger.setFinalResult("Magical natural phenomenon: "+magicType);
             danger.setOneLiner(danger.getFinalResult());
         }
         case "planar: natural + ELEMENT" -> {
-            String magicType = CreatureService.rollMagicType();
+            String magicType = creatureService.rollMagicType();
             danger.setFinalResult("Planar natural phenomenon: "+magicType);
             danger.setOneLiner(danger.getFinalResult());
         }
         case "oddity-based" -> {
-            String oddity = CreatureService.rollOddity();
+            String oddity = creatureService.rollOddity();
             danger.setFinalResult("Natural "+oddity.toLowerCase());
             danger.setOneLiner(danger.getFinalResult());
         }
         case "Creature"->{
             Creature c = new Creature();
-            CreatureService.rollAttributes(c);
+            creatureService.rollAttributes(c);
             c.setDisposition(DetailsArrays.DISPOSITION[0]); //SET DISPOSITION TO "ATTACKING"
             danger.setFinalResult(c.toString());
             danger.setOneLiner(c.getOneLiner());
@@ -113,10 +122,10 @@ public class DangerService implements IGenericService<Danger>, IDangerCRUDServic
     }
 
     @Override
-    public void showOptions(Scanner dataInput, Danger danger, List<Danger> dangerList) {
+    public String showOptions(Scanner dataInput, Danger danger) {
         int option;
         System.out.println("WELCOME TO THE DANGER GENERATOR\n");
-
+        String menu = "MAIN_MENU";
         try{
             do {
                 System.out.print("""
@@ -125,7 +134,7 @@ public class DangerService implements IGenericService<Danger>, IDangerCRUDServic
                             2) View current danger
                             3) View list of generated dangers
                             4) Export current
-                            5) Main menu
+                            0) Main menu
                             
                             \tOption:\s""");
                 option = Integer.parseInt(dataInput.nextLine());
@@ -134,33 +143,34 @@ public class DangerService implements IGenericService<Danger>, IDangerCRUDServic
                 switch (option){
                     case 1 ->{
                         danger = new Danger();
-                        DangerService.rollDanger(danger);
-                        dangerList.add(danger.clone());
+                        rollDanger(danger);
+                        sessionManager.add(Danger.class,danger.clone());
                         printWithFlair(danger);
                     }
                     case 2 -> {
                         if (danger == null){
                             danger = new Danger();
-                            DangerService.rollDanger(danger);
+                            rollDanger(danger);
                         }
-                        dangerList.add(danger.clone());
+                        sessionManager.add(Danger.class,danger.clone());
                         printWithFlair(danger);
                     }
-                    case 3 -> danger = new ViewAll().run(dataInput,dangerList,danger, Danger.class);
+                    case 3 -> danger = viewAll.run(dataInput,danger);
                     case 4 -> {
                         if (danger == null){
                             danger = new Danger();
-                            DangerService.rollDanger(danger);
-                            dangerList.add(danger.clone());
+                            rollDanger(danger);
+                            sessionManager.add(Danger.class,danger.clone());
                         }
                         GenericFunctions.exportPW(danger);
                     }
-                    case 5 -> System.out.println("\nReturning to main menu...\n");
+                    case 0 -> System.out.println("Going back to main menu");
 
                 }
-            }while (option !=5);
+            }while (option !=0);
         }catch (Exception e){
             System.out.println("\nPlease choose a valid option.\n");
         }
+        return menu;
     }
 }

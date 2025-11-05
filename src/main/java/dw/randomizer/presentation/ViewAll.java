@@ -2,16 +2,24 @@ package dw.randomizer.presentation;
 
 import dw.randomizer.model.IPWClass;
 import dw.randomizer.service.GenericFunctions;
+import dw.randomizer.service.util.SessionManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Scanner;
 
+@Component
 public class ViewAll {
 
-    public <T extends IPWClass> T run(Scanner dataInput, List<T> list, T object, Class<T> type){
+    @Autowired
+    SessionManager sessionManager;
+
+    public <T extends IPWClass> T run(Scanner dataInput, T object){
         int option;
         int itemNumber;
-        String label = type.getSimpleName();
+        String label = object.getClass().getSimpleName();
+        List<T> list = (List<T>) sessionManager.getList(object.getClass());
 
         String labelPlural = switch (label){
             case "Discovery" -> "Discoveries";
@@ -41,11 +49,11 @@ public class ViewAll {
 
                 switch (option){
                     case 1 ->{
-
                         System.out.printf("\nPlease insert %s number:\s",label.toLowerCase());
                         itemNumber=Integer.parseInt(dataInput.nextLine());
                         System.out.println();
-                        T selectedItem=list.get(itemNumber-1);
+                        sessionManager.select(object.getClass(),itemNumber-1);
+                        T selectedItem=(T) sessionManager.getSelected(object.getClass());
                         if (itemNumber < 0 || itemNumber>list.size()){
                             System.out.println("Please insert a valid number");
                             continue;

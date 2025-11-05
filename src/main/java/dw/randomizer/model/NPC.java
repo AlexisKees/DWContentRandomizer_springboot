@@ -15,15 +15,15 @@ public class NPC implements IPWClass<NPC> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String[] raceTable;
+    @Transient private String[] raceTable;
     private String race;
     private String gender;
     private String ethnics;
-    private String[] namesTable;
+    @Transient private String[] namesTable;
     private String name;
     private String age;
     private String category;
-    private String[] jobList;
+    @Transient private String[] jobList;
     private String job;
     private String appearance;
     private String personality;

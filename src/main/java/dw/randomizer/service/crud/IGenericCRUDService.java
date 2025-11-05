@@ -1,6 +1,5 @@
-package dw.randomizer.service;
+package dw.randomizer.service.crud;
 
-import dw.randomizer.model.Area;
 import dw.randomizer.model.IPWClass;
 
 import java.util.List;

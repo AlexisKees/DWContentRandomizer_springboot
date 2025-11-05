@@ -8,6 +8,8 @@ import dw.randomizer.model.NPC;
 import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.NPCRepository;
+import dw.randomizer.service.crud.INPCCRUDService;
+import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,18 +24,21 @@ import static dw.randomizer.service.GenericFunctions.printWithFlair;
 public class NPCService implements IGenericService<NPC>, INPCCRUDService {
 
     @Autowired
+    private SessionManager sessionManager;
+    @Autowired
+    private ViewAll viewAll;
+
+    @Autowired
     NPCRepository npcRepository;
 
     @Override
     public List<NPC> listCRUD() {
-        List<NPC> npcList = npcRepository.findAll();
-        return npcList;
+        return npcRepository.findAll();
     }
 
     @Override
     public NPC searchByIdCRUD(Integer id) {
-        NPC npc = npcRepository.findById(id).orElse(null);
-        return npc;
+        return npcRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -46,10 +51,10 @@ public class NPCService implements IGenericService<NPC>, INPCCRUDService {
         npcRepository.delete(npc);
     }
 
-    public static void rollFeatures(NPC npc){
+    public void rollFeatures(NPC npc){
         //set race rarity, races array and race
-        int rarity = Rolls.Roll1d12();
-        switch (CreatureArrays.SUBCATEGORIES_HUMANOID[rarity]) {
+        String rarity = PickFrom(CreatureArrays.SUBCATEGORIES_HUMANOID);
+        switch (rarity) {
             case "Uncommon" -> npc.setRaceTable(CreatureArrays.PROMPTS_HUMANOID_UNCOMMON);
             case "Rare" -> npc.setRaceTable(CreatureArrays.PROMPTS_HUMANOID_RARE);
             default -> npc.setRaceTable(CreatureArrays.PROMPTS_HUMANOID_COMMON);
@@ -97,6 +102,7 @@ public class NPCService implements IGenericService<NPC>, INPCCRUDService {
         }
 
         npc.setJob(PickFrom(npc.getJobList()));
+        if (npc.getCategory().equals("Merchant")) npc.setJob(npc.getJob()+" merchant");
 
         npc.setAppearance(PickFrom(NPCArrays.APPEARANCE));
         npc.setPersonality(PickFrom(NPCArrays.PERSONALITY));
@@ -118,10 +124,10 @@ public class NPCService implements IGenericService<NPC>, INPCCRUDService {
     }
 
     @Override
-    public void showOptions(Scanner dataInput, NPC npc, List<NPC> npcList) {
+    public String showOptions(Scanner dataInput, NPC npc) {
         var option = 0;
         System.out.println("\nWELCOME TO THE NPC GENERATOR\n");
-
+        String menu = "MAIN_MENU";
         do {
             try {
                 System.out.print("""
@@ -130,7 +136,7 @@ public class NPCService implements IGenericService<NPC>, INPCCRUDService {
                         2) View current
                         3) View list of generated NPCs
                         4) Export current
-                        5) Main menu
+                        0) Main menu
                         
                         Option:\s""");
                 option = Integer.parseInt(dataInput.nextLine());
@@ -139,27 +145,29 @@ public class NPCService implements IGenericService<NPC>, INPCCRUDService {
                 switch (option) {
                     case 1 -> {
                         npc = new NPC();
-                        NPCService.rollFeatures(npc);
+                        rollFeatures(npc);
                         printWithFlair(npc);
-                        npcList.add(npc.clone());
+                        sessionManager.add(NPC.class,npc.clone());
                     }
                     case 2 -> {
-                        if (npc==null) {
+                        if (npc.getRace()==null) {
                             npc = new NPC();
-                            NPCService.rollFeatures(npc);
-                            npcList.add(npc.clone());
+                            rollFeatures(npc);
+                            sessionManager.add(NPC.class,npc.clone());
                         }
                         printWithFlair(npc);
                     }
-                    case 3 -> npc = new ViewAll().run(dataInput,npcList,npc, NPC.class);
+                    case 3 -> npc = viewAll.run(dataInput,npc);
                     case 4 -> GenericFunctions.exportPW(npc);
-                    case 5 -> System.out.println("\nReturning to main menu...\n");
+                    case 0 -> System.out.println("Going back to main menu");
                     default -> System.out.print("\nInvalid number!\n\n");
                 }
             } catch (Exception e) {
                 System.out.println("\nPlease choose a valid option.\n");
             }
         }
-        while (option != 5);
+        while (option != 0);
+
+        return menu;
     }
 }

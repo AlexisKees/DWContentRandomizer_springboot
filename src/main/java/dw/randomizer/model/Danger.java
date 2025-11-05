@@ -1,9 +1,6 @@
 package dw.randomizer.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,9 +17,9 @@ public class Danger implements IPWClass<Danger> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String category;
-    private String[] subcategoriesTable;
+    @Transient private String[] subcategoriesTable;
     private String subcategory;
-    private String[] promptTable;
+    @Transient private String[] promptTable;
     private String prompt;
     private String finalResult;
     private String oneLiner;

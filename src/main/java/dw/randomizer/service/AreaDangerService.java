@@ -5,6 +5,7 @@ import dw.randomizer.data.DungeonArrays;
 import dw.randomizer.model.AreaDanger;
 import dw.randomizer.model.Creature;
 import dw.randomizer.repository.AreaDangerRepository;
+import dw.randomizer.service.crud.IAreaDangerCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,11 @@ import static dw.randomizer.model.util.Rolls.PickFrom;
 
 @Service
 public class AreaDangerService implements IGenericService<AreaDanger>, IAreaDangerCRUDService {
+
     @Autowired
-    AreaDangerRepository areaDangerRepository;
+    private CreatureService creatureService;
+    @Autowired
+    private AreaDangerRepository areaDangerRepository;
     @Override
     public List<AreaDanger> listCRUD() {
         List<AreaDanger> areaDangerList = areaDangerRepository.findAll();
@@ -41,7 +45,7 @@ public class AreaDangerService implements IGenericService<AreaDanger>, IAreaDang
 
     }
 
-    public static void rollAreaDanger(AreaDanger danger){
+    public void rollAreaDanger(AreaDanger danger){
         danger.setCategory(PickFrom(DungeonArrays.DUNGEON_DANGER_CATEGORIES));
 
         switch (danger.getCategory()){
@@ -52,40 +56,40 @@ public class AreaDangerService implements IGenericService<AreaDanger>, IAreaDang
         danger.setPrompt(PickFrom(danger.getPromptTable()));
         switch (danger.getPrompt()) {
             case "based on Element" -> {
-                String element = CreatureService.rollElement();
+                String element = creatureService.rollElement();
                 danger.setFinalResult(element+"trap");
                 danger.setOneLiner(danger.getFinalResult());
             }
             case "based on Magic Type" -> {
-                String magicType = CreatureService.rollMagicType();
+                String magicType = creatureService.rollMagicType();
                 danger.setFinalResult("Magic "+magicType+" trap");
                 danger.setOneLiner(danger.getFinalResult());
             }
             case "based on Oddity" -> {
-                String oddity = CreatureService.rollOddity();
+                String oddity = creatureService.rollOddity();
                 danger.setFinalResult(oddity+" trap");
                 danger.setOneLiner(danger.getFinalResult());
             }
             case "Creature leader (with minions)" -> {
                 Creature c = new Creature();
-                CreatureService.rollAttributes(c);
-                CreatureService.setGroupSize(c,"solitary (1)");
+                creatureService.rollAttributes(c);
+                creatureService.setGroupSize(c,"solitary (1)");
                 c.setDisposition(DetailsArrays.DISPOSITION[0]); //SET DISPOSITION TO "ATTACKING"
                 danger.setFinalResult("CREATURE LEADER:\n"+c);
                 danger.setOneLiner(c.getOneLiner()+" leader");
             }
             case "Creature lord (with minions)" ->{
                 Creature c = new Creature();
-                CreatureService.rollAttributes(c);
+                creatureService.rollAttributes(c);
                 c.setDisposition(DetailsArrays.DISPOSITION[0]); //SET DISPOSITION TO "ATTACKING"
-                CreatureService.setGroupSize(c,"solitary (1)");
+                creatureService.setGroupSize(c,"solitary (1)");
                 danger.setFinalResult("CREATURE LORD:\n"+c);
                 danger.setFinalResult(c.toString());
                 danger.setOneLiner(c.getOneLiner()+" lord");
             }
             case "Creature" -> {
                 Creature c = new Creature();
-                CreatureService.rollAttributes(c);
+                creatureService.rollAttributes(c);
                 c.setDisposition(DetailsArrays.DISPOSITION[0]); //SET DISPOSITION TO "ATTACKING"
                 danger.setFinalResult("CREATURE:\n"+c);
                 danger.setOneLiner(c.getOneLiner());
@@ -103,7 +107,7 @@ public class AreaDangerService implements IGenericService<AreaDanger>, IAreaDang
     }
 
     @Override
-    public void showOptions(Scanner dataInput, AreaDanger object, List<AreaDanger> list) {
-
+    public String showOptions(Scanner dataInput, AreaDanger object) {
+    return "";
     }
 }

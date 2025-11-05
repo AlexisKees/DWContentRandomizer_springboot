@@ -1,9 +1,6 @@
 package dw.randomizer.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,11 +14,11 @@ public class Follower implements IPWClass<Follower> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String[] raceTable;
+    @Transient private String[] raceTable;
     private String race;
     private String gender;
     private String ethnics;
-    private String[] namesTable;
+    @Transient private String[] namesTable;
     private String name;
     private String age;
 
@@ -38,7 +35,7 @@ public class Follower implements IPWClass<Follower> {
     private String armorType;
     private int armor;
 
-    private boolean shield;
+    private boolean hasShield;
     private String damage;
     private String tags ="";
 
@@ -231,16 +228,12 @@ public class Follower implements IPWClass<Follower> {
         this.background = background;
     }
 
-    public boolean isShield() {
-        return shield;
-    }
-
     public void setShield(boolean shield) {
-        this.shield = shield;
+        this.hasShield = shield;
     }
 
     public boolean getShield(){
-        return shield;
+        return hasShield;
     }
 
     public String getArmorString() {

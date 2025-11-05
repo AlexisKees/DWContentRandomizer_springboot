@@ -8,6 +8,7 @@ import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.SubMenu;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.DungeonRepository;
+import dw.randomizer.service.crud.IDungeonCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +21,19 @@ import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 @Service
 public class DungeonService implements IDungeonCRUDService {
+    @Autowired
+    private ViewAll viewAll;
+    @Autowired
+    private DungeonAreaService dungeonAreaService;
 
     @Autowired
-    DungeonRepository dungeonRepository;
+    private CreatureService creatureService;
+
+    @Autowired
+    private SteadingService steadingService;
+
+    @Autowired
+    private DungeonRepository dungeonRepository;
 
     @Override
     public List<Dungeon> listCRUD() {
@@ -47,7 +58,7 @@ public class DungeonService implements IDungeonCRUDService {
     }
 
 
-    public static void rollDungeon(Dungeon dungeon){
+    public void rollDungeon(Dungeon dungeon){
 
         //set name template and name
         dungeon.setNameTemplate(PickFrom(DungeonArrays.DUNGEON_NAME_TEMPLATES));
@@ -95,10 +106,10 @@ public class DungeonService implements IDungeonCRUDService {
               default -> theme = PickFrom(DungeonArrays.GONZO_PROMPTS);
           }
           if (Objects.equals(theme,"element")){
-              theme = CreatureService.rollElement();
+              theme = creatureService.rollElement();
           }
           if (Objects.equals(theme, "magic type")){
-              theme = CreatureService.rollMagicType();
+              theme = creatureService.rollMagicType();
           }
           if(Objects.equals(theme, "roll 1d10 twice, combine")){
               theme = (DungeonArrays.GONZO_PROMPTS[Rolls.Roll1d10()]+" and "+DungeonArrays.GONZO_PROMPTS[Rolls.Roll1d10()]);
@@ -109,10 +120,10 @@ public class DungeonService implements IDungeonCRUDService {
         dungeon.setForm(PickFrom(DungeonArrays.DUNGEON_FORM));
         switch (dungeon.getForm()){
          case "ruins of (roll again)" -> dungeon.setForm("Ruins of a "+DungeonArrays.DUNGEON_FORM[Rolls.CustomRoll(17)]);
-         case "roll again, add oddity" ->dungeon.setForm(DungeonArrays.DUNGEON_FORM[Rolls.CustomRoll(17)]+" + "+ CreatureService.rollOddity());
+         case "roll again, add oddity" ->dungeon.setForm(DungeonArrays.DUNGEON_FORM[Rolls.CustomRoll(17)]+" + "+ creatureService.rollOddity());
          case "ruins of steading" ->{
             Steading s = new Steading();
-            SteadingService.rollSteading(s);
+            steadingService.rollSteading(s);
             dungeon.setForm("Ruins of "+s.getOneLiner());
          }
             default -> dungeon.setForm(dungeon.getForm());
@@ -132,10 +143,10 @@ public class DungeonService implements IDungeonCRUDService {
 
     }
 
-    public static void showOptions(Scanner dataInput, Dungeon dungeon, List<Dungeon> dungeonList,List<Area> areaList) {
+    public String showOptions(Scanner dataInput, Dungeon dungeon, List<Dungeon> dungeonList,List<Area> areaList) {
         int option = 0;
         System.out.println("WELCOME TO THE DUNGEON GENERATOR\n");
-
+        String menu = "MAIN_MENU";
         do {
             try {
                 System.out.print("""
@@ -145,7 +156,7 @@ public class DungeonService implements IDungeonCRUDService {
                         3) View generated dungeons list
                         4) View current dungeon
                         5) Export dungeon
-                        6) Main menu
+                        0) Main menu
                       
                         \tOption:\s""");
                 option = Integer.parseInt(dataInput.nextLine());
@@ -154,39 +165,39 @@ public class DungeonService implements IDungeonCRUDService {
                 switch (option) {
                     case 1 -> {
                         dungeon = new Dungeon();
-                        DungeonService.rollDungeon(dungeon);
+                        rollDungeon(dungeon);
                         dungeonList.add(dungeon.clone());
                         printWithFlair(dungeon);
                     }
                     case 2 -> {
                         Area area = null;
-                        SubMenu.run(dataInput, area, dungeon,areaList);
+                        dungeonAreaService.showOptions(dataInput, area, dungeon, areaList);
                     }
-                    case 3 -> dungeon = new ViewAll().run(dataInput,dungeonList,dungeon, Dungeon.class);
+                    case 3 -> dungeon = viewAll.run(dataInput,dungeon);
                     case 4 -> {
-                        if (dungeon==null){
+                        if (dungeon.getName()==null){
                             System.out.println("\nGenerating dungeon...\n");
                             dungeon = new Dungeon();
-                            DungeonService.rollDungeon(dungeon);
+                            rollDungeon(dungeon);
                             dungeonList.add(dungeon.clone());
                         }
                         printWithFlair(dungeon);
                     }
                     case 5 -> {
-                        if (dungeon == null) {
+                        if (dungeon.getName() == null) {
                             dungeon = new Dungeon();
-                            DungeonService.rollDungeon(dungeon);
+                            rollDungeon(dungeon);
                             dungeonList.add(dungeon.clone());
                         }
                         GenericFunctions.exportPW(dungeon);
                     }
-                    case 6 -> System.out.println("\nReturning to main menu...\n");
+                    case 0 -> System.out.println("Going back to main menu");
                     default -> System.out.print("\nInvalid number!\n\n");
                 }
             } catch (Exception e) {
                 System.out.println("\nPlease choose a valid option.\n");
             }
-        }
-        while (option != 6);
+        } while (option != 0);
+        return menu;
     }
 }

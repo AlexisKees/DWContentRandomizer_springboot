@@ -5,6 +5,8 @@ import dw.randomizer.data.SteadingArrays;
 import dw.randomizer.model.Steading;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.SteadingRepository;
+import dw.randomizer.service.crud.ISteadingCRUDService;
+import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,18 +20,23 @@ import static dw.randomizer.service.GenericFunctions.printWithFlair;
 public class SteadingService implements IGenericService<Steading>, ISteadingCRUDService {
 
     @Autowired
+    private SessionManager sessionManager;
+    @Autowired
+    private ViewAll viewAll;
+    @Autowired
+    CreatureService creatureService;
+
+    @Autowired
     SteadingRepository steadingRepository;
 
     @Override
     public List<Steading> listCRUD() {
-        List<Steading> steadingList = steadingRepository.findAll();
-        return steadingList;
+        return steadingRepository.findAll();
     }
 
     @Override
     public Steading searchByIdCRUD(Integer id) {
-        Steading steading = steadingRepository.findById(id).orElse(null);
-        return steading;
+        return steadingRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -43,17 +50,17 @@ public class SteadingService implements IGenericService<Steading>, ISteadingCRUD
     }
 
 
-    public static void rollSteading(Steading steading){
+    public void rollSteading(Steading steading){
         steading.setSize(PickFrom(SteadingArrays.SETTLEMENT_SIZE));
         rollDetails(steading);
     }
 
-    public static void rollSteading(Steading steading, String size){
+    public void rollSteading(Steading steading, String size){
         steading.setSize(size);
         rollDetails(steading);
     }
 
-    private static void rollDetails(Steading steading){
+    private void rollDetails(Steading steading){
         steading.setName(PickFrom(SteadingArrays.STEADING_NAMES));
         switch (steading.getSize()){
             case "VILLAGE" ->{
@@ -78,17 +85,17 @@ public class SteadingService implements IGenericService<Steading>, ISteadingCRUD
             }
         }
 
-        steading.setRaceOfBuilders(CreatureService.rollHumanoid());
+        steading.setRaceOfBuilders(creatureService.rollHumanoid());
         steading.setAlignment(PickFrom(DetailsArrays.ALIGNMENT));
         steading.setDangerLevel(PickFrom(SteadingArrays.DANGER_LEVEL));
         steading.setOneLiner(steading.getName()+", "+steading.getRaceOfBuilders()+" "+steading.getSize().toLowerCase());
     }
 
     @Override
-    public void showOptions(Scanner dataInput, Steading steading, List<Steading> steadingList) {
+    public String showOptions(Scanner dataInput, Steading steading) {
         int option;
         System.out.println("WELCOME TO THE STEADING GENERATOR\n");
-
+        String menu = "MAIN_MENU";
         try {
             do {
                 System.out.print("""
@@ -97,7 +104,7 @@ public class SteadingService implements IGenericService<Steading>, ISteadingCRUD
                         2) View current
                         3) View list of generated steadings
                         4) Export current
-                        5) Main menu
+                        0) Main menu
                         
                         \tOption:\s""");
                 option = Integer.parseInt(dataInput.nextLine());
@@ -106,34 +113,35 @@ public class SteadingService implements IGenericService<Steading>, ISteadingCRUD
                 switch (option) {
                     case 1 -> {
                         steading = new Steading();
-                        SteadingService.rollSteading(steading);
-                        steadingList.add(steading);
+                        rollSteading(steading);
+                        sessionManager.add(Steading.class,steading);
                         printWithFlair(steading);
                     }
                     case 2 -> {
-                        if (steading == null) {
+                        if(steading.getSize() == null) {
                             steading = new Steading();
-                            SteadingService.rollSteading(steading);
-                            steadingList.add(steading);
+                            rollSteading(steading);
+                            sessionManager.add(Steading.class,steading);
                         }
                         printWithFlair(steading);
                     }
-                    case 3 -> steading = new ViewAll().run(dataInput, steadingList, steading, Steading.class);
+                    case 3 -> steading = viewAll.run(dataInput, steading);
                     case 4 -> {
-                        if (steading == null) {
+                        if(steading.getSize() == null) {
                             steading = new Steading();
-                            SteadingService.rollSteading(steading);
-                            steadingList.add(steading);
+                            rollSteading(steading);
+                            sessionManager.add(Steading.class,steading);
                         }
                         GenericFunctions.exportPW(steading);
                     }
-                    case 5 -> System.out.println("\nReturning to main menu...\n");
+                    case 0 -> System.out.println("Going back to main menu");
 
                 }
 
-            } while (option != 5);
+            } while (option != 0);
         } catch (Exception e) {
             System.out.println("\nPlease choose a valid option.\n");
         }
+        return menu;
     }
 }
