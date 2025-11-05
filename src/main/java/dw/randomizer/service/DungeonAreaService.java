@@ -3,6 +3,7 @@ package dw.randomizer.service;
 import dw.randomizer.model.Area;
 import dw.randomizer.model.Dungeon;
 import dw.randomizer.presentation.ViewAll;
+import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +16,16 @@ import static dw.randomizer.service.GenericFunctions.printWithFlair;
 public class DungeonAreaService {
 
     @Autowired
+    private SessionManager sessionManager;
+
+    @Autowired
     private ViewAll viewAll;
     @Autowired
     private AreaService areaService;
 
-    public String showOptions(Scanner dataInput, Area area, Dungeon dungeon,List<Area> areaList) {
+    public String showOptions(Scanner dataInput, Area area, Dungeon dungeon) {
         int option;
-        System.out.println("WELCOME TO THE AREA GENERATOR\n");
+        System.out.println("WELCOME TO THE DUNGEON AREA GENERATOR\n");
         String menu = "MAIN_MENU";
         try{
 
@@ -44,7 +48,7 @@ public class DungeonAreaService {
                     case 1 -> {
                         area = new Area();
                         areaService.rollArea(area);
-                        areaList.add(area.clone());
+                        sessionManager.add(Area.class,area.clone());
                         printWithFlair(area);
                     }
                     case 2 ->{
@@ -61,7 +65,7 @@ public class DungeonAreaService {
                         } else {
                             areaService.rollAreaDetails(area);
                         }
-                        areaList.add(area.clone());
+                        sessionManager.add(Area.class,area.clone());
                         printWithFlair(area);
                     }
                     case 4 -> area = viewAll.run(dataInput, area);
@@ -69,6 +73,7 @@ public class DungeonAreaService {
                         if (area==null){
                             area = new Area();
                             areaService.rollArea(area);
+                            sessionManager.add(Area.class,area.clone());
                         }
                         dungeon.addArea(area.clone());
                     }

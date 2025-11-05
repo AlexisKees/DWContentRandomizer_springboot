@@ -151,7 +151,7 @@ public class Main {
                      }
                      case 6 -> {
                          Dungeon dungeon = new Dungeon();
-                         String menu = subMenu.run(dataInput, dungeon, dungeonList, areaList);
+                         String menu = subMenu.run(dataInput, dungeon);
                          if(menu.equals("DB_MENU")) {
                              if(dungeon.getName()==null){
                                  dungeonService.rollDungeon(dungeon);
@@ -184,11 +184,14 @@ public class Main {
                      }
                      case 9 -> {
                          Quest quest = new Quest();
-                         String menu = subMenu.run(dataInput, quest, questList, npcList, dungeonList, biomeList);
+                         String menu = subMenu.run(dataInput, quest);
                          if(menu.equals("DB_MENU")){
                              if(quest.getTask()==null){
                                  questService.rollQuest(quest);
                                  sessionManager.add(Quest.class,quest);
+                                 sessionManager.add(NPC.class, quest.getQuestGiver());
+                                 sessionManager.add(Dungeon.class,quest.getDungeon());
+                                 sessionManager.add(Biome.class,quest.getBiome());
                              }
                              dbMenu.run(dataInput, quest);
                          }

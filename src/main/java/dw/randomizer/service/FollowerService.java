@@ -239,6 +239,7 @@ public class FollowerService implements IGenericService<Follower>, IFollowerCRUD
                         if (follower.getRace()==null){
                             follower = new Follower();
                             rollFollower(follower);
+                            sessionManager.add(Follower.class,follower.clone());
                         }
                         printWithFlair(follower);
                     }

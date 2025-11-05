@@ -5,10 +5,10 @@ import dw.randomizer.model.Area;
 import dw.randomizer.model.Dungeon;
 import dw.randomizer.model.Steading;
 import dw.randomizer.model.util.Rolls;
-import dw.randomizer.presentation.SubMenu;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.DungeonRepository;
 import dw.randomizer.service.crud.IDungeonCRUDService;
+import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,9 @@ import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 @Service
-public class DungeonService implements IDungeonCRUDService {
+public class DungeonService implements IDungeonCRUDService, IGenericService<Dungeon>{
+    @Autowired
+    private SessionManager sessionManager;
     @Autowired
     private ViewAll viewAll;
     @Autowired
@@ -143,7 +145,7 @@ public class DungeonService implements IDungeonCRUDService {
 
     }
 
-    public String showOptions(Scanner dataInput, Dungeon dungeon, List<Dungeon> dungeonList,List<Area> areaList) {
+    public String showOptions(Scanner dataInput, Dungeon dungeon) {
         int option = 0;
         System.out.println("WELCOME TO THE DUNGEON GENERATOR\n");
         String menu = "MAIN_MENU";
@@ -166,12 +168,12 @@ public class DungeonService implements IDungeonCRUDService {
                     case 1 -> {
                         dungeon = new Dungeon();
                         rollDungeon(dungeon);
-                        dungeonList.add(dungeon.clone());
+                        sessionManager.add(Dungeon.class,dungeon.clone());
                         printWithFlair(dungeon);
                     }
                     case 2 -> {
-                        Area area = null;
-                        dungeonAreaService.showOptions(dataInput, area, dungeon, areaList);
+                        Area area = new Area();
+                        dungeonAreaService.showOptions(dataInput, area, dungeon);
                     }
                     case 3 -> dungeon = viewAll.run(dataInput,dungeon);
                     case 4 -> {
@@ -179,7 +181,7 @@ public class DungeonService implements IDungeonCRUDService {
                             System.out.println("\nGenerating dungeon...\n");
                             dungeon = new Dungeon();
                             rollDungeon(dungeon);
-                            dungeonList.add(dungeon.clone());
+                            sessionManager.add(Dungeon.class,dungeon.clone());
                         }
                         printWithFlair(dungeon);
                     }
@@ -187,7 +189,7 @@ public class DungeonService implements IDungeonCRUDService {
                         if (dungeon.getName() == null) {
                             dungeon = new Dungeon();
                             rollDungeon(dungeon);
-                            dungeonList.add(dungeon.clone());
+                            sessionManager.add(Dungeon.class,dungeon.clone());
                         }
                         GenericFunctions.exportPW(dungeon);
                     }

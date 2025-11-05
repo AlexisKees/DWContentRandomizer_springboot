@@ -380,17 +380,17 @@ public class CreatureService implements IGenericService<Creature>, ICreatureCRUD
                     case 1 -> {
                         creature = new Creature();
                         rollAttributes(creature);
-                        sessionManager.add(Creature.class,creature);
+                        sessionManager.add(Creature.class,creature.clone());
                         printWithFlair(creature);
                     }
                     case 2 -> {
                         if (creature.getCategory() == null) {
                             creature = new Creature();
                             rollAttributes(creature);
-                            sessionManager.add(Creature.class,creature);
+                            sessionManager.add(Creature.class,creature.clone());
                         } else {
                             reRollSubcategory(creature);
-                            sessionManager.add(Creature.class,creature);
+                            sessionManager.add(Creature.class,creature.clone());
                         }
                         printWithFlair(creature);
                     }
@@ -401,7 +401,7 @@ public class CreatureService implements IGenericService<Creature>, ICreatureCRUD
                         } else {
                             reRollPrompt(creature);
                         }
-                        sessionManager.add(Creature.class,creature);
+                        sessionManager.add(Creature.class,creature.clone());
                         printWithFlair(creature);
                     }
                     case 4 -> {
@@ -411,14 +411,14 @@ public class CreatureService implements IGenericService<Creature>, ICreatureCRUD
                         } else {
                             rollStats(creature);
                         }
-                        sessionManager.add(Creature.class,creature);
+                        sessionManager.add(Creature.class,creature.clone());
                         printWithFlair(creature);
                     }
                     case 5 -> {
                         if (creature.getCategory() == null) {
                             creature = new Creature();
                             rollAttributes(creature);
-                            sessionManager.add(Creature.class,creature);
+                            sessionManager.add(Creature.class,creature.clone());
                         }
                         printWithFlair(creature);
                     }
@@ -427,7 +427,7 @@ public class CreatureService implements IGenericService<Creature>, ICreatureCRUD
                         if (creature.getCategory() == null) {
                             creature = new Creature();
                             rollAttributes(creature);
-                            sessionManager.add(Creature.class,creature);
+                            sessionManager.add(Creature.class,creature.clone());
                         }
                         GenericFunctions.exportPW(creature);
                     }

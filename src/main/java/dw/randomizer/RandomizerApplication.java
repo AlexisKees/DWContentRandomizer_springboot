@@ -1,9 +1,6 @@
 package dw.randomizer;
 
 import dw.randomizer.presentation.Main;
-import dw.randomizer.service.crud.*;
-import dw.randomizer.service.util.ClassIdentifier;
-import dw.randomizer.service.util.SessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -92,14 +92,14 @@ public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
                     case 1 ->{
                         biome = new Biome();
                         rollBiome(biome);
-                        sessionManager.add(Biome.class,biome);
+                        sessionManager.add(Biome.class,biome.clone());
                         printWithFlair(sessionManager.getSelected(Biome.class));
                     }
                     case 2 -> {
                         if(biome.getBiome()==null){
                             biome = new Biome();
                             rollBiome(biome);
-                            sessionManager.add(Biome.class,biome);
+                            sessionManager.add(Biome.class,biome.clone());
                         }
                         printWithFlair(biome);
                     }
@@ -107,10 +107,10 @@ public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
                         if(biome.getBiome()==null){
                             biome = new Biome();
                             rollBiome(biome);
-                            sessionManager.add(Biome.class,biome);
+                            sessionManager.add(Biome.class,biome.clone());
                         } else {
                             reRollDetails(biome);
-                            sessionManager.add(Biome.class,biome);
+                            sessionManager.add(Biome.class,biome.clone());
                         }
                         printWithFlair(biome);
                     }
@@ -119,7 +119,7 @@ public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
                         if(biome.getBiome()==null){
                             biome = new Biome();
                             rollBiome(biome);
-                            sessionManager.add(Biome.class,biome);
+                            sessionManager.add(Biome.class,biome.clone());
                         }
                         GenericFunctions.exportPW(biome);
                     }

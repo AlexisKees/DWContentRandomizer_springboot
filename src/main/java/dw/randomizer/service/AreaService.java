@@ -172,13 +172,13 @@ public class AreaService implements IGenericService<Area>, IAreaCRUDService {
                     case 1 -> {
                         area = new Area();
                         rollArea(area);
-                        sessionManager.add(Area.class,area);
+                        sessionManager.add(Area.class,area.clone());
                         printWithFlair(sessionManager.getSelected(Area.class));
                     }
                     case 2 ->{
                         if (area.getAreaType()==null){
                             area = new Area();
-                            sessionManager.add(Area.class,area);
+                            sessionManager.add(Area.class,area.clone());
                             rollArea(area);
                         }
                         printWithFlair(area);
@@ -187,10 +187,10 @@ public class AreaService implements IGenericService<Area>, IAreaCRUDService {
                         if (area.getAreaType()==null){
                             area = new Area();
                             rollArea(area);
-                            sessionManager.add(Area.class,area);
+                            sessionManager.add(Area.class,area.clone());
                         } else {
                             rollAreaDetails(area);
-                            sessionManager.add(Area.class,area);
+                            sessionManager.add(Area.class,area.clone());
                         }
                         printWithFlair(area);
                     }
@@ -199,6 +199,7 @@ public class AreaService implements IGenericService<Area>, IAreaCRUDService {
                         if (area.getAreaType()==null){
                             area = new Area();
                             rollArea(area);
+                            sessionManager.add(Area.class,area);
                         }
                         GenericFunctions.exportPW(area);
                     }

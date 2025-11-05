@@ -4,6 +4,7 @@ import dw.randomizer.data.QuestArrays;
 import dw.randomizer.model.*;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.QuestRepository;
+import dw.randomizer.service.crud.IGenericCRUDService;
 import dw.randomizer.service.crud.IQuestCRUDService;
 import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,10 @@ import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 @Service
-public class QuestService implements IQuestCRUDService {
+public class QuestService implements IQuestCRUDService, IGenericService<Quest> {
+
+    @Autowired
+    private SessionManager sessionManager;
 
     @Autowired
     private ViewAll viewAll;
@@ -75,7 +79,8 @@ public class QuestService implements IQuestCRUDService {
     }
 
 
-    public String showOptions(Scanner dataInput, Quest quest, List<Quest> questList, List<NPC> npcList, List<Dungeon> dungeonList, List<Biome> biomeList) {
+
+    public String showOptions(Scanner dataInput, Quest quest) {
         var option = 0;
         String menu = "MAIN_MENU";
         System.out.println("WELCOME TO THE QUEST GENERATOR\n");
@@ -100,20 +105,20 @@ public class QuestService implements IQuestCRUDService {
                     case 1 -> {
                         quest = new Quest();
                         rollQuest(quest);
-                        questList.add(quest.clone());
-                        npcList.add(quest.getQuestGiver().clone());
-                        dungeonList.add(quest.getDungeon().clone());
-                        biomeList.add(quest.getBiome().clone());
+                        sessionManager.add(Quest.class,quest);
+                        sessionManager.add(NPC.class, quest.getQuestGiver());
+                        sessionManager.add(Dungeon.class,quest.getDungeon());
+                        sessionManager.add(Biome.class,quest.getBiome());
                         printWithFlair(quest.getBrief());
                     }
                     case 2 -> {
                         if(quest.getTask()==null){
                             quest = new Quest();
                             rollQuest(quest);
-                            questList.add(quest.clone());
-                            npcList.add(quest.getQuestGiver().clone());
-                            dungeonList.add(quest.getDungeon().clone());
-                            biomeList.add(quest.getBiome().clone());
+                            sessionManager.add(Quest.class,quest);
+                            sessionManager.add(NPC.class, quest.getQuestGiver());
+                            sessionManager.add(Dungeon.class,quest.getDungeon());
+                            sessionManager.add(Biome.class,quest.getBiome());
                         }
                         printWithFlair("QUEST GIVER:\n\n"+quest.getQuestGiver());
                     }
@@ -121,10 +126,10 @@ public class QuestService implements IQuestCRUDService {
                         if(quest.getTask()==null){
                             quest = new Quest();
                             rollQuest(quest);
-                            questList.add(quest.clone());
-                            npcList.add(quest.getQuestGiver().clone());
-                            dungeonList.add(quest.getDungeon().clone());
-                            biomeList.add(quest.getBiome().clone());
+                            sessionManager.add(Quest.class,quest);
+                            sessionManager.add(NPC.class, quest.getQuestGiver());
+                            sessionManager.add(Dungeon.class,quest.getDungeon());
+                            sessionManager.add(Biome.class,quest.getBiome());
                         }
                         printWithFlair("QUEST LOCATION - BIOME:\n\n"+quest.getBiome()+"\n\n"+"QUEST LOCATION - DUNGEON:\n\n"+quest.getDungeon());
                     }
@@ -132,10 +137,10 @@ public class QuestService implements IQuestCRUDService {
                         if(quest.getTask()==null){
                             quest = new Quest();
                             rollQuest(quest);
-                            questList.add(quest.clone());
-                            npcList.add(quest.getQuestGiver().clone());
-                            dungeonList.add(quest.getDungeon().clone());
-                            biomeList.add(quest.getBiome().clone());
+                            sessionManager.add(Quest.class,quest);
+                            sessionManager.add(NPC.class, quest.getQuestGiver());
+                            sessionManager.add(Dungeon.class,quest.getDungeon());
+                            sessionManager.add(Biome.class,quest.getBiome());
                         }
                         printWithFlair(quest);
                     }
@@ -144,10 +149,10 @@ public class QuestService implements IQuestCRUDService {
                         if(quest.getTask() == null) {
                             quest = new Quest();
                             rollQuest(quest);
-                            questList.add(quest.clone());
-                            npcList.add(quest.getQuestGiver().clone());
-                            dungeonList.add(quest.getDungeon().clone());
-                            biomeList.add(quest.getBiome().clone());
+                            sessionManager.add(Quest.class,quest);
+                            sessionManager.add(NPC.class, quest.getQuestGiver());
+                            sessionManager.add(Dungeon.class,quest.getDungeon());
+                            sessionManager.add(Biome.class,quest.getBiome());
                         }
                         GenericFunctions.exportPW(quest);
                     }
