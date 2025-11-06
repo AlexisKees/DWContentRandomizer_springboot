@@ -54,6 +54,8 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
         discoveryRepository.delete(discovery);
     }
 
+
+
     public void rollDiscovery(Discovery discovery){
         discovery.setCategory(PickFrom(DiscoveryArrays.DISCOVERY_CATEGORIES));
         switch (discovery.getCategory()){
@@ -276,6 +278,7 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
                         2) View current discovery
                         3) View list of generated discoveries
                         4) Export current
+                        5) MANAGE DB
                         0) Main menu
                         
                         \tOption:\s""");
@@ -303,6 +306,10 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
                             sessionManager.add(Discovery.class,discovery.clone());
                         }
                         GenericFunctions.exportPW(discovery);
+                    }
+                    case 5 -> {
+                        System.out.println("ACCESSING DATABASE...");
+                        return "DB_MENU";
                     }
                     case 0 -> System.out.println("Going back to main menu");
 

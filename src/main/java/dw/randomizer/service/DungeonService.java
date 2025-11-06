@@ -1,7 +1,6 @@
 package dw.randomizer.service;
 
 import dw.randomizer.data.DungeonArrays;
-import dw.randomizer.model.Area;
 import dw.randomizer.model.Dungeon;
 import dw.randomizer.model.Steading;
 import dw.randomizer.model.util.Rolls;
@@ -58,6 +57,8 @@ public class DungeonService implements IDungeonCRUDService, IGenericService<Dung
     public void deleteCRUD(Dungeon dungeon) {
         dungeonRepository.delete(dungeon);
     }
+
+
 
 
     public void rollDungeon(Dungeon dungeon){
@@ -165,6 +166,7 @@ public class DungeonService implements IDungeonCRUDService, IGenericService<Dung
                         3) View generated dungeons list
                         4) View current dungeon
                         5) Export dungeon
+                        6) MANAGE DB
                         0) Main menu
                       
                         \tOption:\s""");
@@ -193,6 +195,10 @@ public class DungeonService implements IDungeonCRUDService, IGenericService<Dung
                             sessionManager.add(Dungeon.class,dungeon.clone());
                         }
                         GenericFunctions.exportPW(dungeon);
+                    }
+                    case 6 -> {
+                        System.out.println("ACCESSING DATABASE...");
+                        return "DB_MENU";
                     }
                     case 0 -> System.out.println("Going back to main menu");
                     default -> System.out.print("\nInvalid number!\n\n");

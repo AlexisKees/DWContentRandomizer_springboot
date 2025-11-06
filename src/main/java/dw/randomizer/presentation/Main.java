@@ -74,7 +74,7 @@ public class Main {
                         8)  Generate NPC
                         9)  Generate Quest
                         10) Generate Steading
-                        11) Exit
+                        0) Exit
                         
                         \tOption:\s""");
                 option = Integer.parseInt(dataInput.nextLine());
@@ -89,7 +89,7 @@ public class Main {
                                  areaService.rollArea(area);
                                  sessionManager.add(Area.class,area);
                              }
-                             dbMenu.run(dataInput, sessionManager.getSelected(Area.class));
+                             dbMenu.run(dataInput, Area.class);
                          }
                      }
                      case 2 -> {
@@ -101,7 +101,7 @@ public class Main {
                                  biomeService.rollBiome(biome);
                                  sessionManager.add(Biome.class,biome);
                              }
-                             dbMenu.run(dataInput, sessionManager.getSelected(Biome.class));
+                             dbMenu.run(dataInput,Biome.class);
                          }
                      }
                      case 3 -> {
@@ -112,7 +112,7 @@ public class Main {
                                  creatureService.rollAttributes(creature);
                                  sessionManager.add(Creature.class,creature);
                              }
-                             dbMenu.run(dataInput, sessionManager.getSelected(Creature.class));
+                             dbMenu.run(dataInput, Creature.class);
                          }
                      }
                      case 4 -> {
@@ -123,7 +123,8 @@ public class Main {
                                  dangerService.rollDanger(danger);
                                  sessionManager.add(Danger.class,danger);
                              }
-                             dbMenu.run(dataInput, sessionManager.getSelected(Danger.class));}
+                             dbMenu.run(dataInput, Danger.class);
+                         }
 
                      }
                      case 5 -> {
@@ -134,7 +135,7 @@ public class Main {
                                  discoveryService.rollDiscovery(discovery);
                                  sessionManager.add(Discovery.class,discovery);
                              }
-                             dbMenu.run(dataInput, sessionManager.getSelected(Discovery.class));
+                             dbMenu.run(dataInput, Discovery.class);
                          }
                      }
                      case 6 -> {
@@ -145,7 +146,7 @@ public class Main {
                                  dungeonService.rollDungeon(dungeon);
                                  sessionManager.add(Dungeon.class,dungeon);
                              }
-                             dbMenu.run(dataInput, sessionManager.getSelected(Dungeon.class));
+                             dbMenu.run(dataInput, Dungeon.class);
                          }
                      }
                      case 7 -> {
@@ -156,7 +157,7 @@ public class Main {
                                  followerService.rollFollower(follower);
                                  sessionManager.add(Follower.class,follower);
                              }
-                             dbMenu.run(dataInput, sessionManager.getSelected(Follower.class));
+                             dbMenu.run(dataInput,Follower.class);
                          }
                      }
                      case 8 -> {
@@ -167,7 +168,7 @@ public class Main {
                                  npcService.rollFeatures(npc);
                                  sessionManager.add(NPC.class,npc);
                              }
-                             dbMenu.run(dataInput, sessionManager.getSelected(NPC.class));
+                             dbMenu.run(dataInput, (NPC.class));
                          }
                      }
                      case 9 -> {
@@ -181,7 +182,7 @@ public class Main {
                                  sessionManager.add(Dungeon.class,quest.getDungeon());
                                  sessionManager.add(Biome.class,quest.getBiome());
                              }
-                             dbMenu.run(dataInput, sessionManager.getSelected(Quest.class));
+                             dbMenu.run(dataInput, Quest.class);
                          }
                      }
                      case 10 -> {
@@ -192,14 +193,14 @@ public class Main {
                                  steadingService.rollSteading(steading);
                                  sessionManager.add(Steading.class,steading);
                              }
-                             dbMenu.run(dataInput, sessionManager.getSelected(Steading.class));
+                             dbMenu.run(dataInput, Steading.class);
                          }
                      }
-                     case 11 -> System.out.println("Come back soon!");
+                     case 0 -> System.out.println("Come back soon!");
                      default -> System.out.println("Please, chose a valid option");
                  }
 
-            } while (option != 11);
+            } while (option != 0);
         } catch (NumberFormatException e){
             System.out.println("Please, chose a valid option. Error: ");
         }

@@ -1,5 +1,6 @@
 package dw.randomizer.service.crud;
 
+import dw.randomizer.model.AreaDanger;
 import dw.randomizer.model.Follower;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public interface IFollowerCRUDService extends IGenericCRUDService<Follower>{
     void saveCRUD(Follower area);
     //metodo para delete
     void deleteCRUD(Follower area);
+
 }

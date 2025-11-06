@@ -1,5 +1,6 @@
 package dw.randomizer.service.crud;
 
+import dw.randomizer.model.AreaDanger;
 import dw.randomizer.model.Quest;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public interface IQuestCRUDService extends IGenericCRUDService<Quest>{
     void saveCRUD(Quest area);
     //metodo para delete
     void deleteCRUD(Quest area);
+
 }

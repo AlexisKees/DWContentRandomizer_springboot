@@ -2,7 +2,6 @@ package dw.randomizer.service;
 
 import dw.randomizer.data.DetailsArrays;
 import dw.randomizer.data.SteadingArrays;
-import dw.randomizer.model.NPC;
 import dw.randomizer.model.Steading;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.SteadingRepository;
@@ -49,6 +48,8 @@ public class SteadingService implements IGenericService<Steading>, ISteadingCRUD
     public void deleteCRUD(Steading steading) {
         steadingRepository.delete(steading);
     }
+
+
 
 
     public void rollSteading(Steading steading){
@@ -111,6 +112,7 @@ public class SteadingService implements IGenericService<Steading>, ISteadingCRUD
                         2) View current
                         3) View list of generated steadings
                         4) Export current
+                        5) MANAGE DB
                         0) Main menu
                         
                         \tOption:\s""");
@@ -137,6 +139,10 @@ public class SteadingService implements IGenericService<Steading>, ISteadingCRUD
                             sessionManager.add(Steading.class,steading);
                         }
                         GenericFunctions.exportPW(steading);
+                    }
+                    case 5-> {
+                        System.out.println("ACCESSING DATABASE...");
+                        return "DB_MENU";
                     }
                     case 0 -> System.out.println("Going back to main menu");
 

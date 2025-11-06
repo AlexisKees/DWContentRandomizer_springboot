@@ -10,7 +10,8 @@ public interface IGenericCRUDService<T extends IPWClass> {
     T searchByIdCRUD(Integer id);
     //el siguiente caso save se usa tanto como para INSERT como para UPDATE
     //si id es null, se hace insert, caso contrario se hace update
-    void saveCRUD(T area);
+    void saveCRUD(T object);
     //metodo para delete
-    void deleteCRUD(T area);
+    void deleteCRUD(T object);
+
 }

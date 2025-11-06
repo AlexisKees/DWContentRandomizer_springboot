@@ -45,6 +45,8 @@ public class AreaDangerService implements IGenericService<AreaDanger>, IAreaDang
 
     }
 
+
+
     public void rollAreaDanger(AreaDanger danger){
         danger.setCategory(PickFrom(DungeonArrays.DUNGEON_DANGER_CATEGORIES));
 
@@ -110,4 +112,6 @@ public class AreaDangerService implements IGenericService<AreaDanger>, IAreaDang
     public String showOptions(Scanner dataInput, Class<AreaDanger> parameterClass) {
         return "";
     }
+
+
 }

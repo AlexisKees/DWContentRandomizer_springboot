@@ -4,7 +4,6 @@ import dw.randomizer.data.CreatureArrays;
 import dw.randomizer.data.DetailsArrays;
 import dw.randomizer.data.NPCArrays;
 import dw.randomizer.data.NPCNamesArrays;
-import dw.randomizer.model.Area;
 import dw.randomizer.model.Follower;
 import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
@@ -49,6 +48,8 @@ public class FollowerService implements IGenericService<Follower>, IFollowerCRUD
     public void deleteCRUD(Follower follower) {
         followerRepository.delete(follower);
     }
+
+
 
     public void rollFollower(Follower follower){
         String rarity = PickFrom(CreatureArrays.SUBCATEGORIES_HUMANOID);
@@ -228,6 +229,7 @@ public class FollowerService implements IGenericService<Follower>, IFollowerCRUD
                         3) Reroll this follower
                         4) View list of generated follower
                         5) Export current follower
+                        6) MANAGE DB
                         0) Main menu
                         
                         \tOption:\s""");
@@ -264,6 +266,10 @@ public class FollowerService implements IGenericService<Follower>, IFollowerCRUD
                             sessionManager.add(Follower.class,follower.clone());
                         }
                         GenericFunctions.exportPW(follower);
+                    }
+                    case 6 -> {
+                        System.out.println("ACCESSING DATABASE...");
+                        return "DB_MENU";
                     }
                     case 0 -> System.out.println("Going back to main menu");
                 }

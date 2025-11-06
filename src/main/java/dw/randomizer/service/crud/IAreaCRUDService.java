@@ -13,4 +13,5 @@ public interface IAreaCRUDService extends IGenericCRUDService<Area>{
     void saveCRUD(Area area);
     //metodo para delete
     void deleteCRUD(Area area);
+
 }

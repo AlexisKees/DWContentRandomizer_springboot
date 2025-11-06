@@ -4,7 +4,6 @@ import dw.randomizer.data.QuestArrays;
 import dw.randomizer.model.*;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.QuestRepository;
-import dw.randomizer.service.crud.IGenericCRUDService;
 import dw.randomizer.service.crud.IQuestCRUDService;
 import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +54,8 @@ public class QuestService implements IQuestCRUDService, IGenericService<Quest> {
         questRepository.delete(quest);
     }
 
+
+
     public void rollQuest(Quest quest){
         quest.setTask(PickFrom(QuestArrays.TASK));
         quest.setRelevance(PickFrom(QuestArrays.RELEVANCE));
@@ -102,6 +103,7 @@ public class QuestService implements IQuestCRUDService, IGenericService<Quest> {
                         4) See current quest
                         5) See previously generated quests
                         6) Print quest
+                        7) MANAGE DB
                         0) Main menu
                         
                         \tOption:\s""");
@@ -157,6 +159,10 @@ public class QuestService implements IQuestCRUDService, IGenericService<Quest> {
                             sessionManager.add(Biome.class,quest.getBiome());
                         }
                         GenericFunctions.exportPW(quest);
+                    }
+                    case 7 -> {
+                        System.out.println("ACCESSING DATABASE...");
+                        return "DB_MENU";
                     }
                     case 0 -> System.out.println("Going back to main menu");
                     default -> System.out.print("\nInvalid number!\n\n");

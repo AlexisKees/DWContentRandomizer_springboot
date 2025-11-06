@@ -2,7 +2,6 @@ package dw.randomizer.service;
 
 import dw.randomizer.data.BiomeArrays;
 import dw.randomizer.data.DetailsArrays;
-import dw.randomizer.model.Area;
 import dw.randomizer.model.Biome;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.BiomeRepository;
@@ -127,6 +126,7 @@ public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
                         GenericFunctions.exportPW(biome);
                     }
                     case 6 -> {
+                        System.out.println("ACCESSING DATABASE...");
                         return "DB_MENU";
                     }
                     case 0 -> System.out.println("Going back to main menu");
@@ -152,13 +152,13 @@ public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
     @Override
     public void saveCRUD(Biome biome) {
         biomeRepository.save(biome);
-        printWithFlair("Element saved to database!");
     }
 
     @Override
     public void deleteCRUD(Biome biome) {
         biomeRepository.delete(biome);
-        printWithFlair("Element removed from database!");
     }
+
+
 
 }

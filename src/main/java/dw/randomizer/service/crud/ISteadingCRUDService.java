@@ -1,5 +1,6 @@
 package dw.randomizer.service.crud;
 
+import dw.randomizer.model.AreaDanger;
 import dw.randomizer.model.Steading;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public interface ISteadingCRUDService extends IGenericCRUDService<Steading>{
     void saveCRUD(Steading area);
     //metodo para delete
     void deleteCRUD(Steading area);
+
 }

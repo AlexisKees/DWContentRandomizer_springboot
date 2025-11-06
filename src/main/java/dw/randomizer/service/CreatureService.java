@@ -49,6 +49,8 @@ public class CreatureService implements IGenericService<Creature>, ICreatureCRUD
         creatureRepository.delete(creature);
     }
 
+
+
     public String rollOddity(){
         String odd = PickFrom(DetailsArrays.ODDITY);
 
@@ -378,6 +380,7 @@ public class CreatureService implements IGenericService<Creature>, ICreatureCRUD
                         5) View current creature
                         6) View generated creature list
                         7) Export creature
+                        8) MANAGE DB
                         0) Main menu
                         
                         \tOption:\s""");
@@ -432,6 +435,10 @@ public class CreatureService implements IGenericService<Creature>, ICreatureCRUD
                             sessionManager.add(parameterClass,creature.clone());
                         }
                         GenericFunctions.exportPW(creature);
+                    }
+                    case 8 -> {
+                        System.out.println("ACCESSING DATABASE...");
+                        return "DB_MENU";
                     }
                     case 0 -> System.out.println("Going back to main menu");
                     default -> System.out.print("\nInvalid number!\n\n");

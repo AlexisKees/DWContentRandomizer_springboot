@@ -4,7 +4,6 @@ import dw.randomizer.data.CreatureArrays;
 import dw.randomizer.data.DetailsArrays;
 import dw.randomizer.data.NPCArrays;
 import dw.randomizer.data.NPCNamesArrays;
-import dw.randomizer.model.Follower;
 import dw.randomizer.model.NPC;
 import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
@@ -51,6 +50,7 @@ public class NPCService implements IGenericService<NPC>, INPCCRUDService {
     public void deleteCRUD(NPC npc) {
         npcRepository.delete(npc);
     }
+
 
     public void rollFeatures(NPC npc){
         //set race rarity, races array and race
@@ -144,6 +144,7 @@ public class NPCService implements IGenericService<NPC>, INPCCRUDService {
                         2) View current
                         3) View list of generated NPCs
                         4) Export current
+                        5) MANAGE DB
                         0) Main menu
                         
                         Option:\s""");
@@ -165,6 +166,10 @@ public class NPCService implements IGenericService<NPC>, INPCCRUDService {
                     }
                     case 3 -> npc = viewAll.run(dataInput,NPC.class);
                     case 4 -> GenericFunctions.exportPW(npc);
+                    case 5 -> {
+                        System.out.println("ACCESSING DATABASE...");
+                        return "DB_MENU";
+                    }
                     case 0 -> System.out.println("Going back to main menu");
                     default -> System.out.print("\nInvalid number!\n\n");
                 }

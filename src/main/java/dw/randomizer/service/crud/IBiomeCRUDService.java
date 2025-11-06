@@ -1,5 +1,6 @@
 package dw.randomizer.service.crud;
 
+import dw.randomizer.model.AreaDanger;
 import dw.randomizer.model.Biome;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface IBiomeCRUDService extends IGenericCRUDService<Biome>{
     void saveCRUD(Biome area);
     //metodo para delete
     void deleteCRUD(Biome area);
+
+
 }

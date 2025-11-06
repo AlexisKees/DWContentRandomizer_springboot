@@ -43,6 +43,8 @@ public class AreaDiscoveryService implements IGenericService<AreaDiscovery>, IAr
         areaDiscoveryRepository.delete(areaDiscovery);
     }
 
+
+
     public void rollAreaDiscovery(AreaDiscovery discovery){
         discovery.setCategory(PickFrom(DungeonArrays.DUNGEON_DISCOVERY_CATEGORIES));
 

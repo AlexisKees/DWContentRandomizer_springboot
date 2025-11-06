@@ -51,6 +51,8 @@ public class DangerService implements IGenericService<Danger>, IDangerCRUDServic
         dangerRepository.delete(danger);
     }
 
+
+
     public void rollDanger(Danger danger){
         danger.setCategory(PickFrom(DangerArrays.DANGER_CATEGORIES));
 
@@ -140,6 +142,7 @@ public class DangerService implements IGenericService<Danger>, IDangerCRUDServic
                             2) View current danger
                             3) View list of generated dangers
                             4) Export current
+                            5) MANAGE DB
                             0) Main menu
                             
                             \tOption:\s""");
@@ -166,6 +169,10 @@ public class DangerService implements IGenericService<Danger>, IDangerCRUDServic
                             sessionManager.add(Danger.class,danger.clone());
                         }
                         GenericFunctions.exportPW(danger);
+                    }
+                    case 5-> {
+                        System.out.println("ACCESSING DATABASE...");
+                        return "DB_MENU";
                     }
                     case 0 -> System.out.println("Going back to main menu");
 

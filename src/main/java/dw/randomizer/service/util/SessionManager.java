@@ -34,4 +34,8 @@ public class SessionManager {
     public <T extends IPWClass> T getSelected(Class<T> type){
         return (T) selectedObjects.get(type);
     }
+
+    public <T extends IPWClass> void removeSelected(Class<T> parameterClass){
+        selectedObjects.remove(parameterClass);
+    }
 }

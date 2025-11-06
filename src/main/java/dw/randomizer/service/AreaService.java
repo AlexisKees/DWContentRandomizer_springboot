@@ -4,7 +4,6 @@ import dw.randomizer.data.DungeonArrays;
 import dw.randomizer.model.Area;
 import dw.randomizer.model.AreaDanger;
 import dw.randomizer.model.AreaDiscovery;
-import dw.randomizer.model.Creature;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.AreaRepository;
 import dw.randomizer.service.crud.IAreaCRUDService;
@@ -55,6 +54,8 @@ public class AreaService implements IGenericService<Area>, IAreaCRUDService {
     public void deleteCRUD(Area area) {
         areaRepository.delete(area);
     }
+
+
 
     public void rollArea(Area area) {
         area.setAreaType(PickFrom(DungeonArrays.AREA_TYPE));
@@ -207,6 +208,7 @@ public class AreaService implements IGenericService<Area>, IAreaCRUDService {
                         GenericFunctions.exportPW(area);
                     }
                     case 6 -> {
+                        System.out.println("ACCESSING DATABASE...");
                         return "DB_MENU";
                     }
                     case 0 -> System.out.println("Going back to main menu");
