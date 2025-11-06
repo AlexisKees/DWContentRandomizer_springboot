@@ -1,12 +1,9 @@
 package dw.randomizer.model;
 
-import dw.randomizer.service.AreaDangerService;
-import dw.randomizer.service.AreaDiscoveryService;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +31,8 @@ public class Area implements IPWClass<Area> {
     @ManyToOne
     @JoinColumn(name = "dungeon_id", nullable = true)
     private Dungeon dungeon;
+
+
 
     public String getOneLiner(){
         return oneLiner;

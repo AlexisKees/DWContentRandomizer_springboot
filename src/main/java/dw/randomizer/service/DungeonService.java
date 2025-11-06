@@ -145,7 +145,14 @@ public class DungeonService implements IDungeonCRUDService, IGenericService<Dung
 
     }
 
-    public String showOptions(Scanner dataInput, Dungeon dungeon) {
+    public String showOptions(Scanner dataInput, Class<Dungeon> parameterClass) {
+        Dungeon dungeon;
+        if(sessionManager.getSelected(parameterClass)==null) {
+            dungeon = new Dungeon();
+        } else {
+            dungeon = sessionManager.getSelected(parameterClass);
+        }
+
         int option = 0;
         System.out.println("WELCOME TO THE DUNGEON GENERATOR\n");
         String menu = "MAIN_MENU";
@@ -167,20 +174,15 @@ public class DungeonService implements IDungeonCRUDService, IGenericService<Dung
                 switch (option) {
                     case 1 -> {
                         dungeon = new Dungeon();
-                        rollDungeon(dungeon);
                         sessionManager.add(Dungeon.class,dungeon.clone());
                         printWithFlair(dungeon);
                     }
-                    case 2 -> {
-                        Area area = new Area();
-                        dungeonAreaService.showOptions(dataInput, area, dungeon);
-                    }
-                    case 3 -> dungeon = viewAll.run(dataInput,dungeon);
+                    case 2 -> dungeonAreaService.showOptions(dataInput);
+                    case 3 -> dungeon = viewAll.run(dataInput,Dungeon.class);
                     case 4 -> {
                         if (dungeon.getName()==null){
                             System.out.println("\nGenerating dungeon...\n");
                             dungeon = new Dungeon();
-                            rollDungeon(dungeon);
                             sessionManager.add(Dungeon.class,dungeon.clone());
                         }
                         printWithFlair(dungeon);
@@ -188,7 +190,6 @@ public class DungeonService implements IDungeonCRUDService, IGenericService<Dung
                     case 5 -> {
                         if (dungeon.getName() == null) {
                             dungeon = new Dungeon();
-                            rollDungeon(dungeon);
                             sessionManager.add(Dungeon.class,dungeon.clone());
                         }
                         GenericFunctions.exportPW(dungeon);

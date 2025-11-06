@@ -122,7 +122,13 @@ public class DangerService implements IGenericService<Danger>, IDangerCRUDServic
     }
 
     @Override
-    public String showOptions(Scanner dataInput, Danger danger) {
+    public String showOptions(Scanner dataInput, Class<Danger> parameterClass) {
+        Danger danger;
+        if(sessionManager.getSelected(parameterClass)==null) {
+            danger = new Danger();
+        } else {
+            danger = sessionManager.getSelected(parameterClass);
+        }
         int option;
         System.out.println("WELCOME TO THE DANGER GENERATOR\n");
         String menu = "MAIN_MENU";
@@ -142,23 +148,20 @@ public class DangerService implements IGenericService<Danger>, IDangerCRUDServic
 
                 switch (option){
                     case 1 ->{
-                        danger = new Danger();
                         rollDanger(danger);
                         sessionManager.add(Danger.class,danger.clone());
                         printWithFlair(danger);
                     }
                     case 2 -> {
                         if (danger.getCategory() == null){
-                            danger = new Danger();
                             rollDanger(danger);
                         }
                         sessionManager.add(Danger.class,danger.clone());
                         printWithFlair(danger);
                     }
-                    case 3 -> danger = viewAll.run(dataInput,danger);
+                    case 3 -> danger = viewAll.run(dataInput,Danger.class);
                     case 4 -> {
                         if (danger.getCategory() == null){
-                            danger = new Danger();
                             rollDanger(danger);
                             sessionManager.add(Danger.class,danger.clone());
                         }

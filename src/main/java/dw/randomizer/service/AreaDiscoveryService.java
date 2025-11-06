@@ -74,7 +74,7 @@ public class AreaDiscoveryService implements IGenericService<AreaDiscovery>, IAr
     }
 
     @Override
-    public String showOptions(Scanner dataInput, AreaDiscovery object) {
+    public String showOptions(Scanner dataInput, Class<AreaDiscovery> parameterClass) {
         return "";
     }
 }

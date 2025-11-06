@@ -43,7 +43,7 @@ public class GenericFunctions {
         System.out.println("_________________________________________\n");
     }
 
-    public static void printWithFlair(String o){
+    public static void printWithFlair(String... o){
         System.out.println("_________________________________________");
         System.out.println(o);
         System.out.println("_________________________________________\n");

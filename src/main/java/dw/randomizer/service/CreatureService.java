@@ -355,10 +355,18 @@ public class CreatureService implements IGenericService<Creature>, ICreatureCRUD
     }
 
     @Override
-    public String showOptions(Scanner dataInput, Creature creature) {
-        var option = 0;
-        System.out.println("WELCOME TO THE CREATURE GENERATOR");
+    public String showOptions(Scanner dataInput, Class<Creature> parameterClass) {
+        Creature creature;
+        if(sessionManager.getSelected(parameterClass)==null) {
+            creature = new Creature();
+        } else {
+            creature = sessionManager.getSelected(parameterClass);
+        }
         String menu = "MAIN_MENU";
+        var option = 0;
+
+        System.out.println("WELCOME TO THE CREATURE GENERATOR");
+
         do {
             try {
                 System.out.print("""
@@ -378,56 +386,50 @@ public class CreatureService implements IGenericService<Creature>, ICreatureCRUD
 
                 switch (option) {
                     case 1 -> {
-                        creature = new Creature();
                         rollAttributes(creature);
-                        sessionManager.add(Creature.class,creature.clone());
+                        sessionManager.add(parameterClass,creature.clone());
                         printWithFlair(creature);
                     }
                     case 2 -> {
-                        if (creature.getCategory() == null) {
-                            creature = new Creature();
+                        if (creature.getCategory()== null) {
                             rollAttributes(creature);
-                            sessionManager.add(Creature.class,creature.clone());
+                            sessionManager.add(parameterClass,creature.clone());
                         } else {
                             reRollSubcategory(creature);
-                            sessionManager.add(Creature.class,creature.clone());
+                            sessionManager.add(parameterClass,creature.clone());
                         }
                         printWithFlair(creature);
                     }
                     case 3 -> {
                         if (creature.getCategory() == null) {
-                            creature = new Creature();
                             rollAttributes(creature);
                         } else {
                             reRollPrompt(creature);
                         }
-                        sessionManager.add(Creature.class,creature.clone());
+                        sessionManager.add(parameterClass,creature.clone());
                         printWithFlair(creature);
                     }
                     case 4 -> {
                         if (creature.getCategory() == null) {
-                            creature = new Creature();
                             rollAttributes(creature);
                         } else {
                             rollStats(creature);
                         }
-                        sessionManager.add(Creature.class,creature.clone());
+                        sessionManager.add(parameterClass,creature.clone());
                         printWithFlair(creature);
                     }
                     case 5 -> {
                         if (creature.getCategory() == null) {
-                            creature = new Creature();
                             rollAttributes(creature);
-                            sessionManager.add(Creature.class,creature.clone());
+                            sessionManager.add(parameterClass,creature.clone());
                         }
                         printWithFlair(creature);
                     }
-                    case 6 -> creature = viewAll.run(dataInput,creature);
+                    case 6 -> creature = viewAll.run(dataInput,parameterClass);
                     case 7 -> {
                         if (creature.getCategory() == null) {
-                            creature = new Creature();
                             rollAttributes(creature);
-                            sessionManager.add(Creature.class,creature.clone());
+                            sessionManager.add(parameterClass,creature.clone());
                         }
                         GenericFunctions.exportPW(creature);
                     }

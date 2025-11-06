@@ -15,13 +15,13 @@ public class SubMenu {
         this.classIdentifier = classIdentifier;
     }
 
-    public <T extends IPWClass<T>> String run(Scanner dataInput, T object){
-        var serviceInterface = classIdentifier.getServiceFile((Class<T>) object.getClass());
+    public <T extends IPWClass<T>> String run(Scanner dataInput, Class<T> parameterClass){
+        var serviceInterface = classIdentifier.getServiceFile(parameterClass);
         String menu="MAIN_MENU";
         if (serviceInterface != null) {
-            menu = serviceInterface.showOptions(dataInput, object);
+            menu = serviceInterface.showOptions(dataInput, parameterClass);
         } else {
-            System.out.println("No service registered for class '" + object.getClass() + "'.");
+            System.out.println("No service registered for class '" + parameterClass + "'.");
         }
         return menu;
     }

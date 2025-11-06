@@ -23,7 +23,15 @@ public class DungeonAreaService {
     @Autowired
     private AreaService areaService;
 
-    public String showOptions(Scanner dataInput, Area area, Dungeon dungeon) {
+    public String showOptions(Scanner dataInput) {
+        Area area;
+        if(sessionManager.getSelected(Area.class)==null) {
+            area = new Area();
+        } else {
+            area = sessionManager.getSelected(Area.class);
+        }
+
+        Dungeon dungeon = sessionManager.getSelected(Dungeon.class);
         int option;
         System.out.println("WELCOME TO THE DUNGEON AREA GENERATOR\n");
         String menu = "MAIN_MENU";
@@ -46,21 +54,18 @@ public class DungeonAreaService {
 
                 switch (option){
                     case 1 -> {
-                        area = new Area();
                         areaService.rollArea(area);
                         sessionManager.add(Area.class,area.clone());
                         printWithFlair(area);
                     }
                     case 2 ->{
                         if (area.getAreaType()==null){
-                            area = new Area();
                             areaService.rollArea(area);
                         }
                         printWithFlair(area);
                     }
                     case 3 ->{
                         if (area.getAreaType()==null){
-                            area = new Area();
                             areaService.rollArea(area);
                         } else {
                             areaService.rollAreaDetails(area);
@@ -68,10 +73,9 @@ public class DungeonAreaService {
                         sessionManager.add(Area.class,area.clone());
                         printWithFlair(area);
                     }
-                    case 4 -> area = viewAll.run(dataInput, area);
+                    case 4 -> area = viewAll.run(dataInput, Area.class);
                     case 5 -> {
                         if (area.getAreaType()==null){
-                            area = new Area();
                             areaService.rollArea(area);
                             sessionManager.add(Area.class,area.clone());
                         }

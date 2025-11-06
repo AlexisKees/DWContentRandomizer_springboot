@@ -4,7 +4,7 @@ import dw.randomizer.data.DungeonArrays;
 import dw.randomizer.model.Area;
 import dw.randomizer.model.AreaDanger;
 import dw.randomizer.model.AreaDiscovery;
-import dw.randomizer.model.Biome;
+import dw.randomizer.model.Creature;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.AreaRepository;
 import dw.randomizer.service.crud.IAreaCRUDService;
@@ -147,7 +147,14 @@ public class AreaService implements IGenericService<Area>, IAreaCRUDService {
     }
 
     @Override
-    public String showOptions(Scanner dataInput, Area area) {
+    public String showOptions(Scanner dataInput, Class<Area> parameterClass) {
+        Area area;
+        if(sessionManager.getSelected(parameterClass)==null) {
+            area = new Area();
+        } else {
+            area = sessionManager.getSelected(parameterClass);
+        }
+
         int option;
         System.out.println("WELCOME TO THE AREA GENERATOR\n");
         String menu = "MAIN_MENU";
@@ -170,14 +177,12 @@ public class AreaService implements IGenericService<Area>, IAreaCRUDService {
 
                 switch (option){
                     case 1 -> {
-                        area = new Area();
                         rollArea(area);
                         sessionManager.add(Area.class,area.clone());
                         printWithFlair(sessionManager.getSelected(Area.class));
                     }
                     case 2 ->{
                         if (area.getAreaType()==null){
-                            area = new Area();
                             sessionManager.add(Area.class,area.clone());
                             rollArea(area);
                         }
@@ -185,7 +190,6 @@ public class AreaService implements IGenericService<Area>, IAreaCRUDService {
                     }
                     case 3 ->{
                         if (area.getAreaType()==null){
-                            area = new Area();
                             rollArea(area);
                             sessionManager.add(Area.class,area.clone());
                         } else {
@@ -194,10 +198,9 @@ public class AreaService implements IGenericService<Area>, IAreaCRUDService {
                         }
                         printWithFlair(area);
                     }
-                    case 4 -> area = viewAll.run(dataInput, area);
+                    case 4 -> area = viewAll.run(dataInput, Area.class);
                     case 5 -> {
                         if (area.getAreaType()==null){
-                            area = new Area();
                             rollArea(area);
                             sessionManager.add(Area.class,area);
                         }

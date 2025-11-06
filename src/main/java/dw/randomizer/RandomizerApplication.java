@@ -14,8 +14,6 @@ public class RandomizerApplication implements CommandLineRunner {
 	@Autowired
 	private Main main;
 
-
-
 	private static final Logger logger = LoggerFactory.getLogger(RandomizerApplication.class);
 
 	public static void main(String[] args) {

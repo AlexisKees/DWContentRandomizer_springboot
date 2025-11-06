@@ -4,6 +4,7 @@ import dw.randomizer.data.CreatureArrays;
 import dw.randomizer.data.DetailsArrays;
 import dw.randomizer.data.NPCArrays;
 import dw.randomizer.data.NPCNamesArrays;
+import dw.randomizer.model.Follower;
 import dw.randomizer.model.NPC;
 import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
@@ -124,7 +125,14 @@ public class NPCService implements IGenericService<NPC>, INPCCRUDService {
     }
 
     @Override
-    public String showOptions(Scanner dataInput, NPC npc) {
+    public String showOptions(Scanner dataInput, Class<NPC> parameterClass) {
+        NPC npc;
+        if(sessionManager.getSelected(parameterClass)==null) {
+            npc = new NPC();
+        } else {
+            npc = sessionManager.getSelected(parameterClass);
+        }
+
         var option = 0;
         System.out.println("\nWELCOME TO THE NPC GENERATOR\n");
         String menu = "MAIN_MENU";
@@ -144,20 +152,18 @@ public class NPCService implements IGenericService<NPC>, INPCCRUDService {
 
                 switch (option) {
                     case 1 -> {
-                        npc = new NPC();
                         rollFeatures(npc);
                         printWithFlair(npc);
                         sessionManager.add(NPC.class,npc.clone());
                     }
                     case 2 -> {
                         if (npc.getRace()==null) {
-                            npc = new NPC();
                             rollFeatures(npc);
                             sessionManager.add(NPC.class,npc.clone());
                         }
                         printWithFlair(npc);
                     }
-                    case 3 -> npc = viewAll.run(dataInput,npc);
+                    case 3 -> npc = viewAll.run(dataInput,NPC.class);
                     case 4 -> GenericFunctions.exportPW(npc);
                     case 0 -> System.out.println("Going back to main menu");
                     default -> System.out.print("\nInvalid number!\n\n");

@@ -107,7 +107,7 @@ public class AreaDangerService implements IGenericService<AreaDanger>, IAreaDang
     }
 
     @Override
-    public String showOptions(Scanner dataInput, AreaDanger object) {
-    return "";
+    public String showOptions(Scanner dataInput, Class<AreaDanger> parameterClass) {
+        return "";
     }
 }

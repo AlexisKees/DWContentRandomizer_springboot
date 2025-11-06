@@ -8,7 +8,6 @@ import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Scanner;
 
 @Component
@@ -48,18 +47,6 @@ public class Main {
 
     public void run() {
         Scanner dataInput = new Scanner(System.in);
-        List<Quest> questList = sessionManager.getList(Quest.class);
-        List<NPC> npcList = sessionManager.getList(NPC.class);
-        List<Follower> followerList = sessionManager.getList(Follower.class);
-        List<Steading> steadingList = sessionManager.getList(Steading.class);
-        List<Dungeon> dungeonList = sessionManager.getList(Dungeon.class);
-        List<Area> areaList = sessionManager.getList(Area.class);
-        List<Biome> biomeList = sessionManager.getList(Biome.class);
-        List<Discovery> discoveryList = sessionManager.getList(Discovery.class);
-        List<Danger> dangerList = sessionManager.getList(Danger.class);
-        List<Creature> creatureList = sessionManager.getList(Creature.class);
-
-
 
         try {
             int option;
@@ -95,10 +82,10 @@ public class Main {
 
                  switch (option){
                      case 1 -> {
-                         Area area = new Area();
-                         String menu = subMenu.run(dataInput, area);
+                         String menu = subMenu.run(dataInput, Area.class);
                          if(menu.equals("DB_MENU")) {
-                             if (area.getAreaType()==null){
+                             if (sessionManager.getSelected(Area.class)==null){
+                                 Area area = new Area();
                                  areaService.rollArea(area);
                                  sessionManager.add(Area.class,area);
                              }
@@ -106,10 +93,11 @@ public class Main {
                          }
                      }
                      case 2 -> {
-                         Biome biome = new Biome();
-                         String menu = subMenu.run(dataInput,biome);
+
+                         String menu = subMenu.run(dataInput,Biome.class);
                          if(menu.equals("DB_MENU")){
-                             if (biome.getBiome()==null){
+                             if (sessionManager.getSelected(Biome.class)==null){
+                                 Biome biome = new Biome();
                                  biomeService.rollBiome(biome);
                                  sessionManager.add(Biome.class,biome);
                              }
@@ -117,94 +105,94 @@ public class Main {
                          }
                      }
                      case 3 -> {
-                         Creature creature = new Creature();
-                         String menu = subMenu.run(dataInput, creature);
+                         String menu = subMenu.run(dataInput, Creature.class);
                          if(menu.equals("DB_MENU")){
-                             if(creature.getCategory()==null){
+                             if(sessionManager.getSelected(Creature.class)==null){
+                                 Creature creature = new Creature();
                                  creatureService.rollAttributes(creature);
                                  sessionManager.add(Creature.class,creature);
                              }
-                             dbMenu.run(dataInput, creature);
+                             dbMenu.run(dataInput, sessionManager.getSelected(Creature.class));
                          }
                      }
                      case 4 -> {
-                         Danger danger = new Danger();
-                         String menu = subMenu.run(dataInput, danger);
+                         String menu = subMenu.run(dataInput, Danger.class);
                          if(menu.equals("DB_MENU")) {
-                             if(danger.getCategory()==null){
+                             if(sessionManager.getSelected(Danger.class)==null){
+                                 Danger danger = new Danger();
                                  dangerService.rollDanger(danger);
                                  sessionManager.add(Danger.class,danger);
                              }
-                             dbMenu.run(dataInput, danger);}
+                             dbMenu.run(dataInput, sessionManager.getSelected(Danger.class));}
 
                      }
                      case 5 -> {
-                         Discovery discovery = new Discovery();
-                         String menu = subMenu.run(dataInput,discovery);
+                         String menu = subMenu.run(dataInput,Discovery.class);
                          if(menu.equals("DB_MENU")) {
-                             if(discovery.getCategory()==null){
+                             if(sessionManager.getSelected(Discovery.class)==null){
+                                 Discovery discovery = new Discovery();
                                  discoveryService.rollDiscovery(discovery);
                                  sessionManager.add(Discovery.class,discovery);
                              }
-                             dbMenu.run(dataInput, discovery);
+                             dbMenu.run(dataInput, sessionManager.getSelected(Discovery.class));
                          }
                      }
                      case 6 -> {
-                         Dungeon dungeon = new Dungeon();
-                         String menu = subMenu.run(dataInput, dungeon);
+                         String menu = subMenu.run(dataInput, Dungeon.class);
                          if(menu.equals("DB_MENU")) {
-                             if(dungeon.getName()==null){
+                             if(sessionManager.getSelected(Dungeon.class)==null){
+                                 Dungeon dungeon = new Dungeon();
                                  dungeonService.rollDungeon(dungeon);
                                  sessionManager.add(Dungeon.class,dungeon);
                              }
-                             dbMenu.run(dataInput, dungeon);
+                             dbMenu.run(dataInput, sessionManager.getSelected(Dungeon.class));
                          }
                      }
                      case 7 -> {
-                         Follower follower = new Follower();
-                         String menu = subMenu.run(dataInput,follower);
+                         String menu = subMenu.run(dataInput,Follower.class);
                          if(menu.equals("DB_MENU")) {
-                             if(follower.getRace()==null){
+                             if(sessionManager.getSelected(Follower.class)==null){
+                                 Follower follower = new Follower();
                                  followerService.rollFollower(follower);
                                  sessionManager.add(Follower.class,follower);
                              }
-                             dbMenu.run(dataInput, follower);
+                             dbMenu.run(dataInput, sessionManager.getSelected(Follower.class));
                          }
                      }
                      case 8 -> {
-                         NPC npc = new NPC();
-                         String menu = subMenu.run(dataInput,npc);
+                         String menu = subMenu.run(dataInput,NPC.class);
                          if(menu.equals("DB_MENU")) {
-                             if(npc.getCategory()==null){
+                             if(sessionManager.getSelected(NPC.class)==null){
+                                 NPC npc = new NPC();
                                  npcService.rollFeatures(npc);
                                  sessionManager.add(NPC.class,npc);
                              }
-                             dbMenu.run(dataInput, npc);
+                             dbMenu.run(dataInput, sessionManager.getSelected(NPC.class));
                          }
                      }
                      case 9 -> {
-                         Quest quest = new Quest();
-                         String menu = subMenu.run(dataInput, quest);
+                         String menu = subMenu.run(dataInput, Quest.class);
                          if(menu.equals("DB_MENU")){
-                             if(quest.getTask()==null){
+                             if(sessionManager.getSelected(Quest.class)==null){
+                                 Quest quest = new Quest();
                                  questService.rollQuest(quest);
                                  sessionManager.add(Quest.class,quest);
                                  sessionManager.add(NPC.class, quest.getQuestGiver());
                                  sessionManager.add(Dungeon.class,quest.getDungeon());
                                  sessionManager.add(Biome.class,quest.getBiome());
                              }
-                             dbMenu.run(dataInput, quest);
+                             dbMenu.run(dataInput, sessionManager.getSelected(Quest.class));
                          }
                      }
                      case 10 -> {
-                         Steading steading = new Steading();
-                         String menu = subMenu.run(dataInput, steading);
+                         String menu = subMenu.run(dataInput, Steading.class);
                          if(menu.equals("DB_MENU")){
-                             if(steading.getSize()==null){
+                             if(sessionManager.getSelected(Steading.class)==null){
+                                 Steading steading = new Steading();
                                  steadingService.rollSteading(steading);
                                  sessionManager.add(Steading.class,steading);
                              }
-                             dbMenu.run(dataInput, steading);
+                             dbMenu.run(dataInput, sessionManager.getSelected(Steading.class));
                          }
                      }
                      case 11 -> System.out.println("Come back soon!");

@@ -4,6 +4,7 @@ import dw.randomizer.data.CreatureArrays;
 import dw.randomizer.data.DetailsArrays;
 import dw.randomizer.data.NPCArrays;
 import dw.randomizer.data.NPCNamesArrays;
+import dw.randomizer.model.Area;
 import dw.randomizer.model.Follower;
 import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
@@ -207,7 +208,13 @@ public class FollowerService implements IGenericService<Follower>, IFollowerCRUD
     }
 
     @Override
-    public String showOptions(Scanner dataInput, Follower follower) {
+    public String showOptions(Scanner dataInput, Class<Follower> parameterClass) {
+        Follower follower;
+        if(sessionManager.getSelected(parameterClass)==null) {
+            follower = new Follower();
+        } else {
+            follower = sessionManager.getSelected(parameterClass);
+        }
         int option;
         System.out.println("WELCOME TO THE FOLLOWER GENERATOR\n");
         String menu = "MAIN_MENU";
@@ -230,14 +237,12 @@ public class FollowerService implements IGenericService<Follower>, IFollowerCRUD
 
                 switch (option){
                     case 1 -> {
-                        follower = new Follower();
                         rollFollower(follower);
                         sessionManager.add(Follower.class,follower.clone());
                         printWithFlair(follower);
                     }
                     case 2 ->{
                         if (follower.getRace()==null){
-                            follower = new Follower();
                             rollFollower(follower);
                             sessionManager.add(Follower.class,follower.clone());
                         }
@@ -245,7 +250,6 @@ public class FollowerService implements IGenericService<Follower>, IFollowerCRUD
                     }
                     case 3 ->{
                         if (follower.getRace()==null){
-                            follower = new Follower();
                             rollFollower(follower);
                         } else {
                             rollFollowerDetails(follower);
@@ -253,10 +257,9 @@ public class FollowerService implements IGenericService<Follower>, IFollowerCRUD
                         sessionManager.add(Follower.class,follower.clone());
                         printWithFlair(follower);
                     }
-                    case 4 -> follower = viewAll.run(dataInput, follower);
+                    case 4 -> follower = viewAll.run(dataInput, Follower.class);
                     case 5 -> {
                         if (follower.getRace()==null){
-                            follower = new Follower();
                             rollFollower(follower);
                             sessionManager.add(Follower.class,follower.clone());
                         }

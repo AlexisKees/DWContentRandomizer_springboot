@@ -2,6 +2,7 @@ package dw.randomizer.service;
 
 import dw.randomizer.data.BiomeArrays;
 import dw.randomizer.data.DetailsArrays;
+import dw.randomizer.model.Area;
 import dw.randomizer.model.Biome;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.BiomeRepository;
@@ -68,7 +69,13 @@ public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
     }
 
     @Override
-    public String showOptions(Scanner dataInput, Biome biome) {
+    public String showOptions(Scanner dataInput, Class<Biome> parameterClass) {
+        Biome biome;
+        if(sessionManager.getSelected(parameterClass)==null) {
+            biome = new Biome();
+        } else {
+            biome = sessionManager.getSelected(parameterClass);
+        }
         int option;
         System.out.println("WELCOME TO THE BIOME GENERATOR\n");
         String menu = "MAIN_MENU";
@@ -90,14 +97,12 @@ public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
 
                 switch (option){
                     case 1 ->{
-                        biome = new Biome();
                         rollBiome(biome);
                         sessionManager.add(Biome.class,biome.clone());
                         printWithFlair(sessionManager.getSelected(Biome.class));
                     }
                     case 2 -> {
                         if(biome.getBiome()==null){
-                            biome = new Biome();
                             rollBiome(biome);
                             sessionManager.add(Biome.class,biome.clone());
                         }
@@ -105,7 +110,6 @@ public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
                     }
                     case 3 -> {
                         if(biome.getBiome()==null){
-                            biome = new Biome();
                             rollBiome(biome);
                             sessionManager.add(Biome.class,biome.clone());
                         } else {
@@ -114,10 +118,9 @@ public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
                         }
                         printWithFlair(biome);
                     }
-                    case 4 -> biome = viewAll.run(dataInput,biome);
+                    case 4 -> biome = viewAll.run(dataInput,Biome.class);
                     case 5 -> {
                         if(biome.getBiome()==null){
-                            biome = new Biome();
                             rollBiome(biome);
                             sessionManager.add(Biome.class,biome.clone());
                         }

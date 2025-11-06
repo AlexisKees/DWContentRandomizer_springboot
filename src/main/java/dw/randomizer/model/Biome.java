@@ -89,7 +89,8 @@ public class Biome implements IPWClass<Biome> {
 
     }
 
-    public int getId() {
+    @Override
+    public Integer getId() {
         return id;
     }
 

@@ -80,7 +80,14 @@ public class QuestService implements IQuestCRUDService, IGenericService<Quest> {
 
 
 
-    public String showOptions(Scanner dataInput, Quest quest) {
+    public String showOptions(Scanner dataInput, Class<Quest> parameterClass) {
+        Quest quest;
+        if(sessionManager.getSelected(parameterClass)==null) {
+            quest = new Quest();
+        } else {
+            quest = sessionManager.getSelected(parameterClass);
+        }
+
         var option = 0;
         String menu = "MAIN_MENU";
         System.out.println("WELCOME TO THE QUEST GENERATOR\n");
@@ -103,7 +110,6 @@ public class QuestService implements IQuestCRUDService, IGenericService<Quest> {
 
                 switch (option) {
                     case 1 -> {
-                        quest = new Quest();
                         rollQuest(quest);
                         sessionManager.add(Quest.class,quest);
                         sessionManager.add(NPC.class, quest.getQuestGiver());
@@ -113,7 +119,6 @@ public class QuestService implements IQuestCRUDService, IGenericService<Quest> {
                     }
                     case 2 -> {
                         if(quest.getTask()==null){
-                            quest = new Quest();
                             rollQuest(quest);
                             sessionManager.add(Quest.class,quest);
                             sessionManager.add(NPC.class, quest.getQuestGiver());
@@ -124,7 +129,6 @@ public class QuestService implements IQuestCRUDService, IGenericService<Quest> {
                     }
                     case 3 -> {
                         if(quest.getTask()==null){
-                            quest = new Quest();
                             rollQuest(quest);
                             sessionManager.add(Quest.class,quest);
                             sessionManager.add(NPC.class, quest.getQuestGiver());
@@ -135,7 +139,6 @@ public class QuestService implements IQuestCRUDService, IGenericService<Quest> {
                     }
                     case 4 -> {
                         if(quest.getTask()==null){
-                            quest = new Quest();
                             rollQuest(quest);
                             sessionManager.add(Quest.class,quest);
                             sessionManager.add(NPC.class, quest.getQuestGiver());
@@ -144,10 +147,9 @@ public class QuestService implements IQuestCRUDService, IGenericService<Quest> {
                         }
                         printWithFlair(quest);
                     }
-                    case 5-> quest = viewAll.run(dataInput,quest);
+                    case 5-> quest = viewAll.run(dataInput,Quest.class);
                     case 6 -> {
                         if(quest.getTask() == null) {
-                            quest = new Quest();
                             rollQuest(quest);
                             sessionManager.add(Quest.class,quest);
                             sessionManager.add(NPC.class, quest.getQuestGiver());

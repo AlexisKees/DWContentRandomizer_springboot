@@ -13,4 +13,5 @@ public interface IPWClass<T extends IPWClass> extends Cloneable {
 
     T clone();
 
+    Integer getId();
 }

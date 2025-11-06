@@ -2,6 +2,7 @@ package dw.randomizer.service;
 
 import dw.randomizer.data.DetailsArrays;
 import dw.randomizer.data.SteadingArrays;
+import dw.randomizer.model.NPC;
 import dw.randomizer.model.Steading;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.SteadingRepository;
@@ -92,7 +93,13 @@ public class SteadingService implements IGenericService<Steading>, ISteadingCRUD
     }
 
     @Override
-    public String showOptions(Scanner dataInput, Steading steading) {
+    public String showOptions(Scanner dataInput, Class<Steading> parameterClass) {
+        Steading steading;
+        if(sessionManager.getSelected(parameterClass)==null) {
+            steading = new Steading();
+        } else {
+            steading = sessionManager.getSelected(parameterClass);
+        }
         int option;
         System.out.println("WELCOME TO THE STEADING GENERATOR\n");
         String menu = "MAIN_MENU";
@@ -112,23 +119,20 @@ public class SteadingService implements IGenericService<Steading>, ISteadingCRUD
 
                 switch (option) {
                     case 1 -> {
-                        steading = new Steading();
                         rollSteading(steading);
                         sessionManager.add(Steading.class,steading);
                         printWithFlair(steading);
                     }
                     case 2 -> {
                         if(steading.getSize() == null) {
-                            steading = new Steading();
                             rollSteading(steading);
                             sessionManager.add(Steading.class,steading);
                         }
                         printWithFlair(steading);
                     }
-                    case 3 -> steading = viewAll.run(dataInput, steading);
+                    case 3 -> steading = viewAll.run(dataInput, Steading.class);
                     case 4 -> {
                         if(steading.getSize() == null) {
-                            steading = new Steading();
                             rollSteading(steading);
                             sessionManager.add(Steading.class,steading);
                         }

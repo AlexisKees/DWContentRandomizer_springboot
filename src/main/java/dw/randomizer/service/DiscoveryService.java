@@ -258,7 +258,13 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
     }
 
     @Override
-    public String showOptions(Scanner dataInput, Discovery discovery) {
+    public String showOptions(Scanner dataInput, Class<Discovery> parameterClass) {
+        Discovery discovery;
+        if(sessionManager.getSelected(parameterClass)==null) {
+            discovery = new Discovery();
+        } else {
+            discovery = sessionManager.getSelected(parameterClass);
+        }
         int option;
         System.out.println("WELCOME TO THE DISCOVERY GENERATOR\n");
         String menu = "MAIN_MENU";
@@ -278,24 +284,21 @@ public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryC
 
                 switch (option){
                     case 1 ->{
-                        discovery = new Discovery();
                         rollDiscovery(discovery);
                         sessionManager.add(Discovery.class,discovery.clone());
                         printWithFlair(discovery);
                     }
                     case 2 -> {
                         if(discovery.getCategory()==null){
-                            discovery = new Discovery();
                             rollDiscovery(discovery);
                             sessionManager.add(Discovery.class,discovery.clone());
                         }
                         printWithFlair(discovery);
                         System.out.println("\n");
                     }
-                    case 3 -> discovery = viewAll.run(dataInput,discovery);
+                    case 3 -> discovery = viewAll.run(dataInput,Discovery.class);
                     case 4 -> {
                         if(discovery.getCategory()==null){
-                            discovery = new Discovery();
                             rollDiscovery(discovery);
                             sessionManager.add(Discovery.class,discovery.clone());
                         }
