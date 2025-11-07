@@ -6,7 +6,7 @@ import dw.randomizer.model.*;
 import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.DiscoveryRepository;
-import dw.randomizer.service.crud.IDiscoveryCRUDService;
+import dw.randomizer.service.crud.IGenericCRUDService;
 import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 @Service
-public class DiscoveryService implements IGenericService<Discovery>, IDiscoveryCRUDService {
+public class DiscoveryService implements IGenericService<Discovery>, IGenericCRUDService<Discovery> {
 
     @Autowired
     private SessionManager sessionManager;

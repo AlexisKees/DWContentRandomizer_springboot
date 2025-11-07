@@ -6,7 +6,7 @@ import dw.randomizer.model.Steading;
 import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.DungeonRepository;
-import dw.randomizer.service.crud.IDungeonCRUDService;
+import dw.randomizer.service.crud.IGenericCRUDService;
 import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 @Service
-public class DungeonService implements IDungeonCRUDService, IGenericService<Dungeon>{
+public class DungeonService implements IGenericService<Dungeon>, IGenericCRUDService<Dungeon> {
     @Autowired
     private SessionManager sessionManager;
     @Autowired

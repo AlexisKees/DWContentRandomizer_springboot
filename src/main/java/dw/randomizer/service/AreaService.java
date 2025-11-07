@@ -6,7 +6,7 @@ import dw.randomizer.model.AreaDanger;
 import dw.randomizer.model.AreaDiscovery;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.AreaRepository;
-import dw.randomizer.service.crud.IAreaCRUDService;
+import dw.randomizer.service.crud.IGenericCRUDService;
 import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import static dw.randomizer.model.util.Rolls.*;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 @Service
-public class AreaService implements IGenericService<Area>, IAreaCRUDService {
+public class AreaService implements IGenericService<Area>, IGenericCRUDService<Area> {
 
     @Autowired
     private SessionManager sessionManager;

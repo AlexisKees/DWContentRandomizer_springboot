@@ -13,5 +13,4 @@ public interface IGenericCRUDService<T extends IPWClass> {
     void saveCRUD(T object);
     //metodo para delete
     void deleteCRUD(T object);
-
 }

@@ -5,7 +5,7 @@ import dw.randomizer.data.DetailsArrays;
 import dw.randomizer.model.Creature;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.CreatureRepository;
-import dw.randomizer.service.crud.ICreatureCRUDService;
+import dw.randomizer.service.crud.IGenericCRUDService;
 import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import static dw.randomizer.model.util.Rolls.*;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 @Service
-public class CreatureService implements IGenericService<Creature>, ICreatureCRUDService {
+public class CreatureService implements IGenericService<Creature>, IGenericCRUDService<Creature> {
 
     @Autowired
     private SessionManager sessionManager;

@@ -7,7 +7,6 @@ import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Scanner;
 
 import static dw.randomizer.service.GenericFunctions.printWithFlair;

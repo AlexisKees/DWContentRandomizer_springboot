@@ -3,7 +3,7 @@ package dw.randomizer.service;
 import dw.randomizer.data.DungeonArrays;
 import dw.randomizer.model.AreaDiscovery;
 import dw.randomizer.repository.AreaDiscoveryRepository;
-import dw.randomizer.service.crud.IAreaDiscoveryCRUDService;
+import dw.randomizer.service.crud.IGenericCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.PickFrom;
 
 @Service
-public class AreaDiscoveryService implements IGenericService<AreaDiscovery>, IAreaDiscoveryCRUDService {
+public class AreaDiscoveryService implements IGenericService<AreaDiscovery>, IGenericCRUDService<AreaDiscovery> {
 
     @Autowired
     private CreatureService creatureService;

@@ -8,7 +8,7 @@ import dw.randomizer.model.Follower;
 import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.FollowerRepository;
-import dw.randomizer.service.crud.IFollowerCRUDService;
+import dw.randomizer.service.crud.IGenericCRUDService;
 import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 @Service
-public class FollowerService implements IGenericService<Follower>, IFollowerCRUDService {
+public class FollowerService implements IGenericService<Follower>, IGenericCRUDService<Follower> {
 
     @Autowired
     private SessionManager sessionManager;

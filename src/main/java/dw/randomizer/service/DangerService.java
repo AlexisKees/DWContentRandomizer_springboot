@@ -5,7 +5,7 @@ import dw.randomizer.data.DetailsArrays;
 import dw.randomizer.model.*;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.DangerRepository;
-import dw.randomizer.service.crud.IDangerCRUDService;
+import dw.randomizer.service.crud.IGenericCRUDService;
 import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 @Service
-public class DangerService implements IGenericService<Danger>, IDangerCRUDService {
+public class DangerService implements IGenericService<Danger>, IGenericCRUDService<Danger> {
 
     @Autowired
     private SessionManager sessionManager;

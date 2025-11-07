@@ -5,7 +5,7 @@ import dw.randomizer.data.DetailsArrays;
 import dw.randomizer.model.Biome;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.BiomeRepository;
-import dw.randomizer.service.crud.IBiomeCRUDService;
+import dw.randomizer.service.crud.IGenericCRUDService;
 import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import static dw.randomizer.model.util.Rolls.*;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 @Service
-public class BiomeService implements IGenericService<Biome>, IBiomeCRUDService {
+public class BiomeService implements IGenericService<Biome>, IGenericCRUDService<Biome> {
 
     @Autowired
     private ViewAll viewAll;

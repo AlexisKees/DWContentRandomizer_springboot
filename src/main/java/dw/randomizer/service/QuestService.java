@@ -4,7 +4,7 @@ import dw.randomizer.data.QuestArrays;
 import dw.randomizer.model.*;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.QuestRepository;
-import dw.randomizer.service.crud.IQuestCRUDService;
+import dw.randomizer.service.crud.IGenericCRUDService;
 import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 @Service
-public class QuestService implements IQuestCRUDService, IGenericService<Quest> {
+public class QuestService implements IGenericService<Quest>, IGenericCRUDService<Quest> {
 
     @Autowired
     private SessionManager sessionManager;

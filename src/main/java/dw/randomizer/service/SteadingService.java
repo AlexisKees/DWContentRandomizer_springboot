@@ -5,7 +5,7 @@ import dw.randomizer.data.SteadingArrays;
 import dw.randomizer.model.Steading;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.SteadingRepository;
-import dw.randomizer.service.crud.ISteadingCRUDService;
+import dw.randomizer.service.crud.IGenericCRUDService;
 import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 @Service
-public class SteadingService implements IGenericService<Steading>, ISteadingCRUDService {
+public class SteadingService implements IGenericService<Steading>, IGenericCRUDService<Steading> {
 
     @Autowired
     private SessionManager sessionManager;

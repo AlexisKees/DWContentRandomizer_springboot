@@ -2,7 +2,6 @@ package dw.randomizer.presentation;
 
 import dw.randomizer.model.*;
 import dw.randomizer.service.*;
-import dw.randomizer.service.crud.*;
 import dw.randomizer.service.util.ClassIdentifier;
 import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +13,6 @@ import java.util.Scanner;
 public class Main {
     @Autowired
     private DBMenu dbMenu;
-    @Autowired
-    private IAreaDangerCRUDService areaDangerService;
-    @Autowired
-    private IAreaDiscoveryCRUDService areaDiscoveryService;
     @Autowired
     private AreaService areaService;
     @Autowired

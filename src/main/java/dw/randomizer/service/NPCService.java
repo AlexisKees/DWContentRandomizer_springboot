@@ -8,7 +8,7 @@ import dw.randomizer.model.NPC;
 import dw.randomizer.model.util.Rolls;
 import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.NPCRepository;
-import dw.randomizer.service.crud.INPCCRUDService;
+import dw.randomizer.service.crud.IGenericCRUDService;
 import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
 @Service
-public class NPCService implements IGenericService<NPC>, INPCCRUDService {
+public class NPCService implements IGenericService<NPC>, IGenericCRUDService<NPC> {
 
     @Autowired
     private SessionManager sessionManager;
