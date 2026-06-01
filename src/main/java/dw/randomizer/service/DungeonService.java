@@ -8,6 +8,7 @@ import dw.randomizer.presentation.ViewAll;
 import dw.randomizer.repository.DungeonRepository;
 import dw.randomizer.service.crud.IGenericCRUDService;
 import dw.randomizer.service.util.SessionManager;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.Scanner;
 import static dw.randomizer.model.util.Rolls.PickFrom;
 import static dw.randomizer.service.GenericFunctions.printWithFlair;
 
+@Slf4j
 @Service
 public class DungeonService implements IGenericService<Dungeon>, IGenericCRUDService<Dungeon> {
     @Autowired
@@ -37,24 +39,24 @@ public class DungeonService implements IGenericService<Dungeon>, IGenericCRUDSer
     private DungeonRepository dungeonRepository;
 
     @Override
-    public List<Dungeon> listCRUD() {
+    public List<Dungeon> list() {
         List<Dungeon> dungeonList = dungeonRepository.findAll();
         return dungeonList;
     }
 
     @Override
-    public Dungeon searchByIdCRUD(Integer id) {
+    public Dungeon searchById(Integer id) {
         Dungeon dungeon = dungeonRepository.findById(id).orElse(null);
         return dungeon;
     }
 
     @Override
-    public void saveCRUD(Dungeon dungeon) {
+    public void save(Dungeon dungeon) {
         dungeonRepository.save(dungeon);
     }
 
     @Override
-    public void deleteCRUD(Dungeon dungeon) {
+    public void delete(Dungeon dungeon) {
         dungeonRepository.delete(dungeon);
     }
 
@@ -134,8 +136,8 @@ public class DungeonService implements IGenericService<Dungeon>, IGenericCRUDSer
 
         dungeon.setSituation(PickFrom(DungeonArrays.DUNGEON_SITUATION));
         dungeon.setBuilder(PickFrom(DungeonArrays.DUNGEON_BUILDER));
-        dungeon.setFunction(PickFrom(DungeonArrays.DUNGEON_FUNCTION));
-        if (Objects.equals(dungeon.getFunction(),"roll twice")||Objects.equals(dungeon.getFunction(),"ROLL TWICE")) dungeon.setFunction(Rolls.rollTwice(DungeonArrays.DUNGEON_FUNCTION));
+        dungeon.setPurpose(PickFrom(DungeonArrays.DUNGEON_FUNCTION));
+        if (Objects.equals(dungeon.getPurpose(),"roll twice")||Objects.equals(dungeon.getPurpose(),"ROLL TWICE")) dungeon.setPurpose(Rolls.rollTwice(DungeonArrays.DUNGEON_FUNCTION));
 
         dungeon.setCauseOfRuin(PickFrom(DungeonArrays.DUNGEON_CAUSE_OF_RUIN));
         dungeon.setAccessibility(PickFrom(DungeonArrays.DUNGEON_ACCESSIBILITY));
@@ -175,7 +177,7 @@ public class DungeonService implements IGenericService<Dungeon>, IGenericCRUDSer
 
                 switch (option) {
                     case 1 -> {
-                        dungeon = new Dungeon();
+                        rollDungeon(dungeon);
                         sessionManager.add(Dungeon.class,dungeon.clone());
                         printWithFlair(dungeon);
                     }
@@ -204,7 +206,7 @@ public class DungeonService implements IGenericService<Dungeon>, IGenericCRUDSer
                     default -> System.out.print("\nInvalid number!\n\n");
                 }
             } catch (Exception e) {
-                System.out.println("\nPlease choose a valid option.\n");
+                log.error("Please choose a valid option. Error: {}", e.getMessage(), e);
             }
         } while (option != 0);
         return menu;

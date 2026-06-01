@@ -35,22 +35,22 @@ public class DiscoveryService implements IGenericService<Discovery>, IGenericCRU
     private DiscoveryRepository discoveryRepository;
 
     @Override
-    public List<Discovery> listCRUD() {
+    public List<Discovery> list() {
         return discoveryRepository.findAll();
     }
 
     @Override
-    public Discovery searchByIdCRUD(Integer id) {
+    public Discovery searchById(Integer id) {
         return discoveryRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void saveCRUD(Discovery discovery) {
+    public void save(Discovery discovery) {
         discoveryRepository.save(discovery);
     }
 
     @Override
-    public void deleteCRUD(Discovery discovery) {
+    public void delete(Discovery discovery) {
         discoveryRepository.delete(discovery);
     }
 

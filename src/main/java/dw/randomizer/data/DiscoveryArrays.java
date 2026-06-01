@@ -69,10 +69,7 @@ public class DiscoveryArrays {
             "Stash","Stash"
     };
 
-    /* ---- CREATURE ----
-       (esta categoría no tiene subtítulos propios en la tabla;
-        si preferís homogeneidad, podés usar un solo subcategoría repetida)
-    */
+
     public static final String[] CREATURE_SUBCATEGORIES = {
             "Creature","Creature","Creature","Creature",
             "Creature","Creature","Creature","Creature",
@@ -96,7 +93,7 @@ public class DiscoveryArrays {
     };
 
 
-    /* ========== 3) PROMPTS POR SUBTÍTULO (d12) ========== */
+
     /* ---- UNNATURAL FEATURE → DIVINE ---- */
     public static final String[] DIVINE_PROMPTS = {
             "presence","manifestation",

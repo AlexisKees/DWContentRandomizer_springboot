@@ -5,11 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Creature implements IPWClass<Creature> {
+public class Creature implements IPWClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +18,8 @@ public class Creature implements IPWClass<Creature> {
     private String category;
     private String subcategory;
     private String prompt;
-    @Transient private String[] categoryTable;
+    @Transient
+    private String[] categoryTable;
     @Transient private String[] subcategoryTable;
     @Transient private String[] promptTable;
     private String size;

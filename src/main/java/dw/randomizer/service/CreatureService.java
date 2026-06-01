@@ -30,22 +30,22 @@ public class CreatureService implements IGenericService<Creature>, IGenericCRUDS
     CreatureRepository creatureRepository;
 
     @Override
-    public List<Creature> listCRUD() {
+    public List<Creature> list() {
         return creatureRepository.findAll();
     }
 
     @Override
-    public Creature searchByIdCRUD(Integer id) {
+    public Creature searchById(Integer id) {
         return creatureRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void saveCRUD(Creature creature) {
+    public void save(Creature creature) {
         creatureRepository.save(creature);
     }
 
     @Override
-    public void deleteCRUD(Creature creature) {
+    public void delete(Creature creature) {
         creatureRepository.delete(creature);
     }
 

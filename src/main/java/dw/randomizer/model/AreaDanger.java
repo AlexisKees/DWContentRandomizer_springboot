@@ -11,7 +11,7 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AreaDanger implements IPWClass<AreaDanger> {
+public class AreaDanger implements IPWClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

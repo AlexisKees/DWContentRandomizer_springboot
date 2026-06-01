@@ -1,6 +1,6 @@
 package dw.randomizer.model;
 
-public interface IPWClass<T extends IPWClass> extends Cloneable {
+public interface IPWClass extends Cloneable {
 
     String oneLiner ="";
 
@@ -11,7 +11,7 @@ public interface IPWClass<T extends IPWClass> extends Cloneable {
 
     void setOneLiner(String oneLiner);
 
-    T clone();
+    IPWClass clone();
 
     Integer getId();
 

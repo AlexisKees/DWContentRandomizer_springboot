@@ -11,7 +11,7 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Biome implements IPWClass<Biome> {
+public class Biome implements IPWClass {
     // se agrega atributo id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

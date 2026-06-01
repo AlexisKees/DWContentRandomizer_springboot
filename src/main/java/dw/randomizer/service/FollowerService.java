@@ -30,22 +30,22 @@ public class FollowerService implements IGenericService<Follower>, IGenericCRUDS
     FollowerRepository followerRepository;
 
     @Override
-    public List<Follower> listCRUD() {
+    public List<Follower> list() {
         return followerRepository.findAll();
     }
 
     @Override
-    public Follower searchByIdCRUD(Integer id) {
+    public Follower searchById(Integer id) {
         return followerRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void saveCRUD(Follower follower) {
+    public void save(Follower follower) {
         followerRepository.save(follower);
     }
 
     @Override
-    public void deleteCRUD(Follower follower) {
+    public void delete(Follower follower) {
         followerRepository.delete(follower);
     }
 

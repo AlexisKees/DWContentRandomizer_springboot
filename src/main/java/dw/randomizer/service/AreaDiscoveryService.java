@@ -24,22 +24,22 @@ public class AreaDiscoveryService implements IGenericService<AreaDiscovery>, IGe
     private AreaDiscoveryRepository areaDiscoveryRepository;
 
     @Override
-    public List<AreaDiscovery> listCRUD() {
+    public List<AreaDiscovery> list() {
         return areaDiscoveryRepository.findAll();
     }
 
     @Override
-    public AreaDiscovery searchByIdCRUD(Integer id) {
+    public AreaDiscovery searchById(Integer id) {
         return areaDiscoveryRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void saveCRUD(AreaDiscovery areaDiscovery) {
+    public void save(AreaDiscovery areaDiscovery) {
         areaDiscoveryRepository.save(areaDiscovery);
     }
 
     @Override
-    public void deleteCRUD(AreaDiscovery areaDiscovery) {
+    public void delete(AreaDiscovery areaDiscovery) {
         areaDiscoveryRepository.delete(areaDiscovery);
     }
 

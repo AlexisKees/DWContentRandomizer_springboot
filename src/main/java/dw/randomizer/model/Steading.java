@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Steading implements IPWClass<Steading> {
+public class Steading implements IPWClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -35,23 +35,23 @@ public class AreaService implements IGenericService<Area>, IGenericCRUDService<A
     private AreaRepository areaRepository;
 
     @Override
-    public List<Area> listCRUD() {
+    public List<Area> list() {
         return areaRepository.findAll();
     }
 
     @Override
-    public Area searchByIdCRUD(Integer id) {
+    public Area searchById(Integer id) {
 
         return areaRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void saveCRUD(Area area) {
+    public void save(Area area) {
         areaRepository.save(area);
     }
 
     @Override
-    public void deleteCRUD(Area area) {
+    public void delete(Area area) {
         areaRepository.delete(area);
     }
 

@@ -5,12 +5,13 @@ import dw.randomizer.service.*;
 import dw.randomizer.service.util.ClassIdentifier;
 import dw.randomizer.service.util.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
 
 @Component
-public class Main {
+public class Main implements CommandLineRunner {
     @Autowired
     private DBMenu dbMenu;
     @Autowired
@@ -199,5 +200,10 @@ public class Main {
         } catch (NumberFormatException e){
             System.out.println("Please, chose a valid option. Error: ");
         }
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+//        run();
     }
 }

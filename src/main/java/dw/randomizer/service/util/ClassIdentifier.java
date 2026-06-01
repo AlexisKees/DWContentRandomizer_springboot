@@ -45,11 +45,11 @@ public class ClassIdentifier {
 
 
     @SuppressWarnings("unchecked")
-    public <T extends IPWClass<?>> IGenericService<T> getServiceFile(Class<T> c) {
+    public <T extends IPWClass> IGenericService<T> getServiceFile(Class<T> c) {
         return (IGenericService<T>) serviceMap.get(c);
     }
     @SuppressWarnings("unchecked")
-    public <T extends IPWClass<?>> IGenericCRUDService<T> getCRUDFile(Class<T> c){
+    public <T extends IPWClass> IGenericCRUDService<T> getCRUDFile(Class<T> c){
         return (IGenericCRUDService<T>) serviceMap.get(c);
     }
 }

@@ -175,6 +175,7 @@ public class SteadingArrays {
     };
 
     public static final String[] STEADING_NAMES = {
+            /*ARPAD - based on Hungarain*/
             "Aldott (Blessed)",
             "Almahid (Applebridge)",
             "Elesett (Fallen)",
@@ -201,6 +202,8 @@ public class SteadingArrays {
             "Volgyom (Valley)",
             "Zoldom (Green Hill)",
 
+            /* OLORU - based on Yoruba */
+
             "Asala Ilu (Desert Town)",
             "Atijo Ina (Old Fire)",
             "Bajesia (Broken Banner)",
@@ -225,6 +228,8 @@ public class SteadingArrays {
             "Oluwakaji (Lord’s Tomb)",
             "Opolokuta (Many Stones)",
             "Opoligi (Many Trees)",
+
+            /* VALKOINA - based on Finnish*/
 
             "Etuvartio (Outpost)",
             "Hopea Kaivos (Silver Mine)",
@@ -251,6 +256,8 @@ public class SteadingArrays {
             "Vapaanki (Free Town)",
             "Vihreä Paikka (Green Place)",
             "Viimeinen Koti (Last Home)",
+
+            /* TAMANGURIAN - based on Hungarian */
 
             "Airdib (Blessed Waters)",
             "Airjinh (Clearwater)",

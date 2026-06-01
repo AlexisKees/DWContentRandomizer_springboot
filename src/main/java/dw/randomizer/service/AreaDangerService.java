@@ -22,25 +22,25 @@ public class AreaDangerService implements IGenericService<AreaDanger>, IGenericC
     @Autowired
     private AreaDangerRepository areaDangerRepository;
     @Override
-    public List<AreaDanger> listCRUD() {
+    public List<AreaDanger> list() {
         List<AreaDanger> areaDangerList = areaDangerRepository.findAll();
         return areaDangerList;
     }
 
     @Override
-    public AreaDanger searchByIdCRUD(Integer id) {
+    public AreaDanger searchById(Integer id) {
         AreaDanger areaDanger = areaDangerRepository.findById(id).orElse(null);
         return areaDanger;
     }
 
     @Override
-    public void saveCRUD(AreaDanger areaDanger) {
+    public void save(AreaDanger areaDanger) {
         areaDangerRepository.save(areaDanger);
 
     }
 
     @Override
-    public void deleteCRUD(AreaDanger areaDanger) {
+    public void delete(AreaDanger areaDanger) {
         areaDangerRepository.delete(areaDanger);
 
     }

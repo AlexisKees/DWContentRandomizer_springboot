@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Follower implements IPWClass<Follower> {
+public class Follower implements IPWClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

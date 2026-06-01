@@ -35,22 +35,22 @@ public class QuestService implements IGenericService<Quest>, IGenericCRUDService
     QuestRepository questRepository;
 
     @Override
-    public List<Quest> listCRUD() {
+    public List<Quest> list() {
         return questRepository.findAll();
     }
 
     @Override
-    public Quest searchByIdCRUD(Integer id) {
+    public Quest searchById(Integer id) {
         return questRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void saveCRUD(Quest quest) {
+    public void save(Quest quest) {
         questRepository.save(quest);
     }
 
     @Override
-    public void deleteCRUD(Quest quest) {
+    public void delete(Quest quest) {
         questRepository.delete(quest);
     }
 

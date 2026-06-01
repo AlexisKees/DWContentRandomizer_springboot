@@ -11,7 +11,7 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Discovery implements IPWClass<Discovery> {
+public class Discovery implements IPWClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

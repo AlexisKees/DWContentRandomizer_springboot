@@ -32,22 +32,22 @@ public class DangerService implements IGenericService<Danger>, IGenericCRUDServi
     private DangerRepository dangerRepository;
 
     @Override
-    public List<Danger> listCRUD() {
+    public List<Danger> list() {
         return dangerRepository.findAll();
     }
 
     @Override
-    public Danger searchByIdCRUD(Integer id) {
+    public Danger searchById(Integer id) {
         return dangerRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void saveCRUD(Danger danger) {
+    public void save(Danger danger) {
         dangerRepository.save(danger);
     }
 
     @Override
-    public void deleteCRUD(Danger danger) {
+    public void delete(Danger danger) {
         dangerRepository.delete(danger);
     }
 

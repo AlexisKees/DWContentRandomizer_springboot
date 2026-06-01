@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Quest implements IPWClass<Quest> {
+public class Quest implements IPWClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

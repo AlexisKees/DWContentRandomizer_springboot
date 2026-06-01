@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class RandomizerApplication implements CommandLineRunner {
 
 	@Autowired
-	private Main main;
+	private Main mainCLI;
 
 	private static final Logger logger = LoggerFactory.getLogger(RandomizerApplication.class);
 
@@ -23,6 +23,8 @@ public class RandomizerApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-			main.run();
+		mainCLI.run();
 	}
+
+
 }

@@ -30,22 +30,22 @@ public class SteadingService implements IGenericService<Steading>, IGenericCRUDS
     SteadingRepository steadingRepository;
 
     @Override
-    public List<Steading> listCRUD() {
+    public List<Steading> list() {
         return steadingRepository.findAll();
     }
 
     @Override
-    public Steading searchByIdCRUD(Integer id) {
+    public Steading searchById(Integer id) {
         return steadingRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void saveCRUD(Steading steading) {
+    public void save(Steading steading) {
         steadingRepository.save(steading);
     }
 
     @Override
-    public void deleteCRUD(Steading steading) {
+    public void delete(Steading steading) {
         steadingRepository.delete(steading);
     }
 

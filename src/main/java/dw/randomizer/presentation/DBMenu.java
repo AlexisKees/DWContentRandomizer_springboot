@@ -51,7 +51,7 @@ public class DBMenu<T extends IPWClass> {
                 switch (option){
                     case 1 -> {
                         System.out.println("\n\n");
-                        List<T> list = serviceFile.listCRUD();
+                        List<T> list = serviceFile.list();
                         for(T o : list){
                             System.out.println(String.format("Element id: %d\n%s\n\n",o.getId(), o));
                         }
@@ -61,7 +61,7 @@ public class DBMenu<T extends IPWClass> {
                         Integer id;
                         System.out.print("\n\tPlease insert ID:\s");
                         id = Integer.parseInt(dataInput.nextLine());
-                        object = (T) serviceFile.searchByIdCRUD(id);
+                        object = (T) serviceFile.searchById(id);
                         sessionManager.add(parameterClass, object);
                         printWithFlair(object);
                     }
@@ -69,12 +69,12 @@ public class DBMenu<T extends IPWClass> {
                     case 4 -> {
                         T element = sessionManager.getSelected(parameterClass);
                         System.out.println(element);
-                        serviceFile.saveCRUD(element);
+                        serviceFile.save(element);
                     }
                     case 5 ->{
                         System.out.print("\n\tPlease insert: ID\s");
                         Integer id = Integer.parseInt(dataInput.nextLine());
-                        T object = (T) serviceFile.searchByIdCRUD(id);
+                        T object = (T) serviceFile.searchById(id);
                         System.out.println("You will replace this element:\n\n"+object+"\n\n"+
                                             "With this one:\n\n"+sessionManager.getSelected(parameterClass)+
                                             "\n\n\tAre you sure (y/n)?\s");
@@ -82,7 +82,7 @@ public class DBMenu<T extends IPWClass> {
                         switch (sure){
                             case "y", "Y", "yes", "Yes", "YES" -> {
                                 sessionManager.getSelected(parameterClass).setId(id);
-                                serviceFile.saveCRUD(sessionManager.getSelected(parameterClass));
+                                serviceFile.save(sessionManager.getSelected(parameterClass));
                                 System.out.println("ELEMENT HAS BEEN REPLACED");
                             }
                             case "n", "N", "no", "No", "NO" ->{
@@ -94,13 +94,13 @@ public class DBMenu<T extends IPWClass> {
                     case 6 -> {
                         System.out.print("\n\tPlease insert: ID\s");
                         Integer id = Integer.parseInt(dataInput.nextLine());
-                        T object = (T) serviceFile.searchByIdCRUD(id);
+                        T object = (T) serviceFile.searchById(id);
                         System.out.println("You will delete this element from the Database:\n\n"+object
                                 +"\n\n\tAre you sure (y/n)?\s");
                         String sure = dataInput.nextLine();
                         switch (sure){
                             case "y", "Y", "yes", "Yes", "YES" -> {
-                                serviceFile.deleteCRUD(object);
+                                serviceFile.delete(object);
                                 sessionManager.removeSelected(parameterClass);
                                 System.out.println("ELEMENT HAS BEEN DELETED");
                             }
@@ -109,7 +109,7 @@ public class DBMenu<T extends IPWClass> {
                             }
                             default -> System.out.println("Insert a valid option: Are you sure (y/n)?\s");
                         }
-                        serviceFile.deleteCRUD(sessionManager.getSelected(parameterClass));
+                        serviceFile.delete(sessionManager.getSelected(parameterClass));
                     }
                     case 0 -> System.out.println("GOING BACK...");
                 }

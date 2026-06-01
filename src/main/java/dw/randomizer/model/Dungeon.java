@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Dungeon implements IPWClass<Dungeon> {
+public class Dungeon implements IPWClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ public class Dungeon implements IPWClass<Dungeon> {
     private String situation;
     private String accessibility;
     private String builder;
-    private String function;
+    private String purpose;
     private String causeOfRuin;
 
     @OneToOne(mappedBy = "dungeon", optional = true)
@@ -146,12 +146,12 @@ public class Dungeon implements IPWClass<Dungeon> {
         this.builder = builder;
     }
 
-    public String getFunction() {
-        return function;
+    public String getPurpose() {
+        return purpose;
     }
 
-    public void setFunction(String function) {
-        this.function = function;
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
     }
 
     public String getCauseOfRuin() {
@@ -229,7 +229,7 @@ public class Dungeon implements IPWClass<Dungeon> {
              Accessibility: %s
              Builder: %s
              Function: %s
-             Cause of ruin: %s""",this.name.toUpperCase(), this.size, this.rooms,this.themesAmount, this.getThemes(), this.form,this.exits, this.situation, this.accessibility,this.builder, this.function, this.causeOfRuin);
+             Cause of ruin: %s""",this.name.toUpperCase(), this.size, this.rooms,this.themesAmount, this.getThemes(), this.form,this.exits, this.situation, this.accessibility,this.builder, this.purpose, this.causeOfRuin);
         if (!this.getAreas().isEmpty()){
             str+=String.format("\n\nDUNGEON AREAS:");
             int areaNumber =1 ;

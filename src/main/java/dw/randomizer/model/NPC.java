@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NPC implements IPWClass<NPC> {
+public class NPC implements IPWClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

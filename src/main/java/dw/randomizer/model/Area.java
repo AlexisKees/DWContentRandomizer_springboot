@@ -12,21 +12,24 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Area implements IPWClass<Area> {
+public class Area implements IPWClass {
 
     @Id
+    @Column(name="area_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String rarity;
     private String areaType;
     private String areaDressing;
     private int discoveriesAmount;
-    @OneToMany(mappedBy = "area", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Transient private List<AreaDiscovery> discoveries = new ArrayList<>();
     private int dangersAmount;
-    @OneToMany(mappedBy = "area", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Transient private List<AreaDanger> dangers = new ArrayList<>();
     private String oneLiner;
+
+    @OneToMany(mappedBy = "area", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    private List<AreaDiscovery> discoveries = new ArrayList<>();
+
+    @OneToMany(mappedBy = "area", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    private List<AreaDanger> dangers = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "dungeon_id", nullable = true)

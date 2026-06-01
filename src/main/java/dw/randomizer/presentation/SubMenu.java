@@ -15,7 +15,7 @@ public class SubMenu {
         this.classIdentifier = classIdentifier;
     }
 
-    public <T extends IPWClass<T>> String run(Scanner dataInput, Class<T> parameterClass){
+    public <T extends IPWClass> String run(Scanner dataInput, Class<T> parameterClass){
         var serviceInterface = classIdentifier.getServiceFile(parameterClass);
         String menu="MAIN_MENU";
         if (serviceInterface != null) {

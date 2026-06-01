@@ -32,22 +32,22 @@ public class NPCService implements IGenericService<NPC>, IGenericCRUDService<NPC
     NPCRepository npcRepository;
 
     @Override
-    public List<NPC> listCRUD() {
+    public List<NPC> list() {
         return npcRepository.findAll();
     }
 
     @Override
-    public NPC searchByIdCRUD(Integer id) {
+    public NPC searchById(Integer id) {
         return npcRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void saveCRUD(NPC npc) {
+    public void save(NPC npc) {
         npcRepository.save(npc);
     }
 
     @Override
-    public void deleteCRUD(NPC npc) {
+    public void delete(NPC npc) {
         npcRepository.delete(npc);
     }
 
